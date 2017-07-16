@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:bing_wallpaper"
         mc:Ignorable="d"
-        Title="Bing Wallpaper" Height="295" Width="525" Icon="images/bing-wallpaper-icon.ico" ResizeMode="CanMinimize" >
+        Title="Bing Wallpaper" Height="295" Width="525" Icon="images/bing-wallpaper-icon.ico" ResizeMode="CanMinimize" Closing="Window_Closing" ShowInTaskbar="False" StateChanged="Window_StateChanged">
     <Grid>
         <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="image_Loaded"/>
         <Grid Margin="0,0,20,19.667" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
@@ -17,9 +18,25 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Text_title}" />
+                   Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Path=Text_title}" />
             <TextBlock Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Text_copyright}"/>
+                   Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Path=Text_copyright}"/>
         </Grid>
+        <tb:TaskbarIcon x:Name="myNotifyIcon"
+                    Visibility="Visible"
+                    ToolTipText="{Binding Text_title}"
+                    DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"
+                    IconSource="/images/bing-wallpaper-icon.ico"
+                    MenuActivation="RightClick"
+                    PopupActivation="DoubleClick"
+        >
+            <!-- Set a simple context menu  -->
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Exit" Click="MenuItem_Click"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
     </Grid>
+    
 </Window>

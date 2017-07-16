@@ -29,14 +29,54 @@ namespace bing_wallpaper
         {
             SetBingWallpaper("es-ES");
             //SetBingWallpaper();
+
             InitializeComponent();
-            DataContext = this;
+            this.DataContext = this;
 
             string info = bing_object?.images?.FirstOrDefault()?.copyright;
-            Text_copyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
-            Text_title = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
+            if (info != null)
+            {
+                Text_copyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
+                Text_title = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
+            }
+            Minimize();
         }
 
+        #region Properties
+
+        private string text_title;
+        private string text_copyright;
+        public string Text_title
+        {
+            get { return text_title; }
+            set
+            {
+                text_title = value;
+                RaisePropertyChanged("Text_title");
+            }
+        }
+ 
+        public string Text_copyright
+        {
+            get { return text_copyright; }
+            set
+            {
+                text_copyright = value;
+                RaisePropertyChanged("Text_copyright");
+            }
+        }
+
+        private ICommand _doubleClickCommandTaskBarIcon;
+        public ICommand DoubleClickCommandTaskBarIcon
+        {
+            get
+            {
+                return _doubleClickCommandTaskBarIcon ?? (_doubleClickCommandTaskBarIcon = new CommandHandler(() => ActionDoubleClickCommandTaskBarIcon(), true));
+            }
+        }
+        #endregion
+
+        #region Functions
         public void SetBingWallpaper(string location = "en-US")
         {
             try
@@ -49,11 +89,48 @@ namespace bing_wallpaper
             }
             catch (System.Net.WebException)
             {
-                Thread.Sleep(60*1000*5);
+                Thread.Sleep(60 * 1000 * 5);
                 SetBingWallpaper(location);
             }
         }
 
+        private void Minimize()
+        {
+            this.WindowState = WindowState.Minimized;
+            this.Visibility = Visibility.Hidden;
+            this.ShowInTaskbar = false;
+            SystemCommands.MinimizeWindow(this);
+        }
+
+        private void MaximizeOrNormal()
+        {
+            this.WindowState = WindowState.Normal;
+            this.Visibility = Visibility.Visible;
+            this.ShowInTaskbar = true;
+            SystemCommands.RestoreWindow(this);
+        }
+        #endregion
+
+        #region EventHandlers
+        private void RaisePropertyChanged(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            switch (this.WindowState)
+            {
+                case WindowState.Minimized:
+                    Minimize();
+                    break;
+                case WindowState.Maximized:
+                case WindowState.Normal:
+                    MaximizeOrNormal();
+                    break;
+            }
+        }
         private void image_Loaded(object sender, RoutedEventArgs e)
         {
             Image img = sender as Image;
@@ -61,30 +138,28 @@ namespace bing_wallpaper
             img.Source = new BitmapImage(new Uri(bing_image_file, UriKind.RelativeOrAbsolute));
         }
 
-        private string text_title;
-        private string text_copyright;
-        public string Text_title
+        public void ActionDoubleClickCommandTaskBarIcon()
         {
-            get{ return text_title; }
-            set
+            if(this.WindowState == WindowState.Minimized)
             {
-                text_title = value;
-                RaisePropertyChanged("text_title");
+                MaximizeOrNormal();
+            }
+            else
+            {
+                Minimize();
             }
         }
-        public string Text_copyright
+
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-            get{ return text_copyright; }
-            set
-            {
-                text_copyright = value;
-                RaisePropertyChanged("text_copyright");
-            }
+            Minimize();
+            e.Cancel = true;
         }
-        private void RaisePropertyChanged(string propName)
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            Environment.Exit(0);
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
     }
 }
