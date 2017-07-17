@@ -6,37 +6,123 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:bing_wallpaper"
         mc:Ignorable="d"
-        Title="Bing Wallpaper" Height="295" Width="525" Icon="images/bing-wallpaper-icon.ico" ResizeMode="CanMinimize" Closing="Window_Closing" ShowInTaskbar="False" StateChanged="Window_StateChanged">
+        Title="Bing Wallpaper" Height="295" Width="625.5" Icon="images/bing-wallpaper-icon.ico" ResizeMode="CanMinimize" Closing="Window_Closing" ShowInTaskbar="False" StateChanged="Window_StateChanged">
+    <Window.Resources>
+        <SolidColorBrush x:Key="SolidBorderBrush" Color="#FFB900" />
+        <SolidColorBrush x:Key="SoftGrey" Color="#eee" />
+        <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
+        <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+        <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid Cursor="Hand">
+                            <Border Name="Border"
+                                Margin="0,0,0,0" 
+                                Background="White"
+                                BorderBrush="{StaticResource SolidBorderBrush}" 
+                                BorderThickness="0,0,0,0">
+                                <ContentPresenter x:Name="ContentSite"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"            
+                                    ContentSource="Header"
+                                    Margin="12,2,12,2"
+                                    RecognizesAccessKey="True"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Panel.ZIndex" Value="100" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="5,0,0,0" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SoftGrey}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="image_Loaded"/>
-        <Grid Margin="0,0,20,19.667" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
-            <Grid.Background>
-                <SolidColorBrush Color="Black" Opacity="0.6"/>
-            </Grid.Background>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="1*" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Path=Text_title}" />
-            <TextBlock Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Path=Text_copyright}"/>
-        </Grid>
-        <tb:TaskbarIcon x:Name="myNotifyIcon"
-                    Visibility="Visible"
-                    ToolTipText="{Binding Text_title}"
-                    DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"
-                    IconSource="/images/bing-wallpaper-icon.ico"
-                    MenuActivation="RightClick"
-                    PopupActivation="DoubleClick"
-        >
+        <TabControl TabStripPlacement="Left" BorderThickness="0">
+            <TabItem Header="Bing Picture"  Width="100" Height="30" BorderBrush="{x:Null}" IsSelected="True">
+                <Grid>
+                    <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="image_Loaded"/>
+                    <Grid Margin="0,0,20,19.667" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
+                        <Grid.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"/>
+                        </Grid.Background>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
+                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Text_title}" />
+                        <TextBlock Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
+                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Text_copyright}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings" Width="100" Height="30" BorderBrush="{x:Null}">
+                <TextBlock>
+                    DeferredContent2
+                </TextBlock>
+            </TabItem>
+        </TabControl>
+        <tb:TaskbarIcon x:Name="myNotifyIcon" Visibility="Visible"  DataContext="{Binding}" DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"
+                    IconSource="/images/bing-wallpaper-icon.ico" MenuActivation="RightClick" PopupActivation="DoubleClick">
             <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Exit" Click="MenuItem_Click"/>
+                    <!--<MenuItem Header="Preferences" Click="MenuItem_Click_Configure">
+                        <MenuItem.Icon>
+                            <Image>
+                                <Image.Source>
+                                    <BitmapImage UriSource="images/settings.ico" />
+                                </Image.Source>
+                            </Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Exit" Click="MenuItem_Click_Exit">
+                        <MenuItem.Icon>
+                            <Image>
+                                <Image.Source>
+                                    <BitmapImage UriSource="images/cancel.ico" />
+                                </Image.Source>
+                            </Image>
+                        </MenuItem.Icon>
+                    </MenuItem>-->
+                    <MenuItem Header="Preferences" Click="MenuItem_Click_Configure"/>
+                    <MenuItem Header="Exit" Click="MenuItem_Click_Exit"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
+            <!--
+                We can use arbitrary UI elements as ToolTips.
+                Let's use a semi-transparent border.
+            -->
+            <tb:TaskbarIcon.TrayToolTip>
+                <Grid Margin="0,0,0,20" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
+                    <Grid.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.6"/>
+                    </Grid.Background>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" x:Name="textBlock3" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
+                                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Text_title}" />
+                    <TextBlock Grid.Row="1" x:Name="textBlock4" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
+                                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Text_copyright}"/>
+                </Grid>
+            </tb:TaskbarIcon.TrayToolTip>
+
         </tb:TaskbarIcon>
     </Grid>
-    
 </Window>

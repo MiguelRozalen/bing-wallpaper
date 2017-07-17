@@ -156,10 +156,15 @@ namespace bing_wallpaper
             e.Cancel = true;
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Click_Exit(object sender, RoutedEventArgs e)
         {
             Environment.Exit(0);
         }
         #endregion
+
+        private void MenuItem_Click_Configure(object sender, RoutedEventArgs e)
+        {
+            MaximizeOrNormal();
+        }
     }
 }
