@@ -153,6 +153,22 @@
   <ItemGroup>
     <Resource Include="images\settings.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\bing-icon-grey.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\settings-bing.ico" />
+    <Resource Include="images\settings-grey.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\bing-wallpaper-icon-inverse.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\info-bing.ico" />
+    <Resource Include="images\info-bing.png" />
+    <Resource Include="images\info-grey.ico" />
+    <Resource Include="images\info-grey.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
