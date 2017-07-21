@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -166,5 +168,35 @@ namespace bing_wallpaper
         {
             MaximizeOrNormal();
         }
+
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabControl tab = sender as TabControl;
+            TabItem item = tab?.SelectedItem as TabItem;
+            if (item != null)
+            {
+                DoubleAnimation animation_width = new DoubleAnimation(item.Width, item.Width * 0.965, 
+                    new Duration(new TimeSpan(0, 0, 0, 0, 230)));
+                DoubleAnimation animation_height = new DoubleAnimation(item.Height, item.Height * 0.965, 
+                    new Duration(new TimeSpan(0, 0, 0, 0, 230)));
+
+                animation_width.AutoReverse = true;
+                animation_height.AutoReverse = true;
+                
+                Storyboard.SetTarget(animation_width, item);
+                Storyboard.SetTarget(animation_height, item);
+                
+                Storyboard.SetTargetProperty(animation_width, new PropertyPath("Width"));
+                Storyboard.SetTargetProperty(animation_height, new PropertyPath("Height"));
+                
+                Storyboard story = new Storyboard();
+                story.Children.Add(animation_width);
+                story.Children.Add(animation_height);
+                story.Begin();
+            }
+        }
+
+
+       
     }
 }
