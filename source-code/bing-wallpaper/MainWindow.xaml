@@ -9,15 +9,12 @@
         Title="Bing Wallpaper" MinHeight="295" Height="295" Width="675.5" MinWidth="675.5" Icon="images/bing-wallpaper-icon.ico" ResizeMode="CanMinimize" Closing="Window_Closing" ShowInTaskbar="False" StateChanged="Window_StateChanged">
     <Window.Resources>
         <SolidColorBrush x:Key="SolidBorderBrush" Color="#FFB900" />
-        <SolidColorBrush x:Key="SoftGrey" Color="AntiqueWhite" /> <!--9c9c9c-->
-        <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
-        <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
-        <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+        <SolidColorBrush x:Key="SoftGrey" Color="#9c9c9c" />
         <Style TargetType="{x:Type TabItem}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid Name="Grid" Cursor="Hand">
+                        <Grid Name="tabHeader" Cursor="Hand">
                             <Border Name="OutBorder" BorderThickness="0,8,8,8" BorderBrush="White"/>
                             <Border Name="Border"
                                 Margin="0,8,8,8"
@@ -29,7 +26,7 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left"            
                                     ContentSource="Header"
-                                    Margin="12,0,12,1"
+                                    Margin="12,0,12,3"
                                     RecognizesAccessKey="True"/>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -39,13 +36,9 @@
                             <Trigger Property="IsSelected" Value="False">
                                 <Setter Property="Foreground" Value="#9e9e9e"/>
                             </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
-                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="OutBorder" Property="BorderBrush" Value="{StaticResource SoftGrey}" />
-                                <Setter TargetName="Grid" Property="Background" Value="{StaticResource SoftGrey}" />
+                            <Trigger SourceName="tabHeader" Property="IsMouseOver" Value="True">
+                                <Setter TargetName="OutBorder" Property="BorderBrush" Value="AntiqueWhite" />
+                                <Setter TargetName="tabHeader" Property="Background" Value="AntiqueWhite" />
                             </Trigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -53,7 +46,7 @@
                                     <Condition Property="IsSelected" Value="False" />
                                 </MultiTrigger.Conditions>
                                 <MultiTrigger.Setters>
-                                    <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SoftGrey}" />
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="AntiqueWhite" />
                                 </MultiTrigger.Setters>
                             </MultiTrigger>
                             <MultiTrigger>
@@ -70,11 +63,21 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="{x:Type Hyperlink}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource SoftGrey}"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Foreground" Value="SteelBlue" />
+            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+        </Style>
     </Window.Resources>
 
     <Grid>
-        <TabControl TabStripPlacement="Left" BorderThickness="0" SelectionChanged="OnSelectionChanged">
-            <TabItem FontSize="14" Width="150" Height="40" BorderBrush="{x:Null}" IsSelected="True">
+        <TabControl x:Name="tabControl" TabStripPlacement="Left" BorderThickness="0" SelectionChanged="OnSelectionChanged">
+            <TabItem FontSize="13" Width="150" Height="40" BorderBrush="{x:Null}">
                 <TabItem.Style>
                     <Style TargetType="TabItem" BasedOn="{StaticResource ResourceKey={x:Type TabItem}}">
                         <Setter Property="Header">
@@ -125,7 +128,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem FontSize="14" Width="150" Height="40" BorderBrush="{x:Null}">
+            <TabItem FontSize="13" Width="150" Height="40" BorderBrush="{x:Null}">
                 <TabItem.Style>
                     <Style TargetType="TabItem" BasedOn="{StaticResource ResourceKey={x:Type TabItem}}">
                         <Setter Property="Header">
@@ -158,12 +161,40 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*" IsEnabled="False"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <TextBlock>
-                    DeferredContent2
-                </TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Text="Aplication Settings" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Execution Period" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                   
+                    <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Image Location" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+                    
+                    <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Run at Startup" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                     
+                    <TextBlock Grid.Row="5" Grid.Column="0" FontSize="13" Text="Set Wallpaper" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                    
+                    <TextBlock Grid.Row="6" Grid.Column="0" FontSize="13" Text="Set Lock Screen" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                    
+                    
+                </Grid>
             </TabItem>
-            <TabItem FontSize="14" Width="150" Height="40" BorderBrush="{x:Null}">
+            <TabItem FontSize="13" Width="150" Height="40" BorderBrush="{x:Null}">
                 <TabItem.Style>
                     <Style TargetType="TabItem" BasedOn="{StaticResource ResourceKey={x:Type TabItem}}">
                         <Setter Property="Header">
@@ -196,44 +227,67 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-
-                <TextBlock>
-                    DeferredContent3
-                </TextBlock>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="8*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="28*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="6*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Row="0" Grid.Column="0" Width="auto" Source="images/bing-wallpaper-icon-inverse.ico"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="36" Foreground="{StaticResource SolidBorderBrush}" Text="Bing Wallpaper" Margin="10,0,0,0" VerticalAlignment="Top" />
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="5*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="13" Text="Author" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
+                            <Hyperlink NavigateUri="https://github.com/MiguelRozalen" RequestNavigate="Hyperlink_RequestNavigate" >
+                                Miguel A. Rozalén
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Text="0.9.1" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Text="22/07/2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
+                            <Hyperlink NavigateUri="https://github.com/MiguelRozalen/bing-wallpaper" RequestNavigate="Hyperlink_RequestNavigate">
+                                https://github.com/MiguelRozalen/bing-wallpaper
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Licence" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                    </Grid>
+                  </Grid>
             </TabItem>
         </TabControl>
         <tb:TaskbarIcon x:Name="myNotifyIcon" Visibility="Visible"  DataContext="{Binding}" DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"
                     IconSource="/images/bing-wallpaper-icon.ico" MenuActivation="RightClick" PopupActivation="DoubleClick">
-            <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
-                    <!--<MenuItem Header="Preferences" Click="MenuItem_Click_Configure">
-                        <MenuItem.Icon>
-                            <Image>
-                                <Image.Source>
-                                    <BitmapImage UriSource="images/settings.ico" />
-                                </Image.Source>
-                            </Image>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Exit" Click="MenuItem_Click_Exit">
-                        <MenuItem.Icon>
-                            <Image>
-                                <Image.Source>
-                                    <BitmapImage UriSource="images/cancel.ico" />
-                                </Image.Source>
-                            </Image>
-                        </MenuItem.Icon>
-                    </MenuItem>-->
-                    <MenuItem Header="Preferences" Click="MenuItem_Click_Configure"/>
+                    <MenuItem Header="Open" Click="MenuItem_Click_Open"/>
                     <Separator/>
                     <MenuItem Header="Exit" Click="MenuItem_Click_Exit"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
-            <!--
-                We can use arbitrary UI elements as ToolTips.
-                Let's use a semi-transparent border.
-            -->
             <tb:TaskbarIcon.TrayToolTip>
                 <Grid Margin="0,0,0,20" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
                     <Grid.Background>
@@ -249,7 +303,6 @@
                                         Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Text_copyright}"/>
                 </Grid>
             </tb:TaskbarIcon.TrayToolTip>
-
         </tb:TaskbarIcon>
     </Grid>
 </Window>

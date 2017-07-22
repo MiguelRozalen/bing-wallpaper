@@ -27,6 +27,7 @@ namespace bing_wallpaper
     {
         private static string bing_image_file = null;
         private static BingObject bing_object = null;
+
         public MainWindow()
         {
             SetBingWallpaper("es-ES");
@@ -48,6 +49,7 @@ namespace bing_wallpaper
 
         private string text_title;
         private string text_copyright;
+
         public string Text_title
         {
             get { return text_title; }
@@ -125,11 +127,7 @@ namespace bing_wallpaper
             switch (this.WindowState)
             {
                 case WindowState.Minimized:
-                    Minimize();
-                    break;
-                case WindowState.Maximized:
-                case WindowState.Normal:
-                    MaximizeOrNormal();
+                    Minimize(); 
                     break;
             }
         }
@@ -154,49 +152,60 @@ namespace bing_wallpaper
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Minimize();
             e.Cancel = true;
+            Minimize();
         }
 
         private void MenuItem_Click_Exit(object sender, RoutedEventArgs e)
         {
             Environment.Exit(0);
         }
-        #endregion
 
-        private void MenuItem_Click_Configure(object sender, RoutedEventArgs e)
+        private void MenuItem_Click_Open(object sender, RoutedEventArgs e)
         {
-            MaximizeOrNormal();
+            if (this.WindowState == WindowState.Minimized)
+            {
+                MaximizeOrNormal();
+            }
+            e.Handled = true;
         }
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TabControl tab = sender as TabControl;
-            TabItem item = tab?.SelectedItem as TabItem;
-            if (item != null)
+        {   
+            if (this.WindowState != WindowState.Minimized)
             {
-                DoubleAnimation animation_width = new DoubleAnimation(item.Width, item.Width * 0.965, 
-                    new Duration(new TimeSpan(0, 0, 0, 0, 230)));
-                DoubleAnimation animation_height = new DoubleAnimation(item.Height, item.Height * 0.965, 
-                    new Duration(new TimeSpan(0, 0, 0, 0, 230)));
+                TabControl tab = sender as TabControl;
+                TabItem item = tab?.SelectedItem as TabItem;
+                
+                if (item != null)
+                {
+                    DoubleAnimation animation_width = new DoubleAnimation(item.Width, item.Width * 0.965,
+                        new Duration(new TimeSpan(0, 0, 0, 0, 230)));
+                    DoubleAnimation animation_height = new DoubleAnimation(item.Height, item.Height * 0.965,
+                        new Duration(new TimeSpan(0, 0, 0, 0, 230)));
 
-                animation_width.AutoReverse = true;
-                animation_height.AutoReverse = true;
-                
-                Storyboard.SetTarget(animation_width, item);
-                Storyboard.SetTarget(animation_height, item);
-                
-                Storyboard.SetTargetProperty(animation_width, new PropertyPath("Width"));
-                Storyboard.SetTargetProperty(animation_height, new PropertyPath("Height"));
-                
-                Storyboard story = new Storyboard();
-                story.Children.Add(animation_width);
-                story.Children.Add(animation_height);
-                story.Begin();
+                    animation_width.AutoReverse = true;
+                    animation_height.AutoReverse = true;
+
+                    Storyboard.SetTarget(animation_width, item);
+                    Storyboard.SetTarget(animation_height, item);
+
+                    Storyboard.SetTargetProperty(animation_width, new PropertyPath("Width"));
+                    Storyboard.SetTargetProperty(animation_height, new PropertyPath("Height"));
+
+                    Storyboard story = new Storyboard();
+                    story.Children.Add(animation_width);
+                    story.Children.Add(animation_height);
+                    story.Begin();
+                }
             }
         }
 
-
-       
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+        #endregion
     }
 }

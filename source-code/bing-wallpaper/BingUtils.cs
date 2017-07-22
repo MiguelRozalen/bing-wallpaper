@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 
 namespace bing_wallpaper
 {
@@ -45,16 +46,24 @@ namespace bing_wallpaper
             return result;
         }
 
+        [DllImport("wininet.dll")]
+        private extern static bool InternetGetConnectedState(out int description, int reservedValue);
+
+        public static bool IsInternetAvailable()
+        {
+            int description;
+            return InternetGetConnectedState(out description, 0);
+        }
+
         private static void Step2_DownloadImageFile(string url)
         {
             try
             {
-                WebClient webClient = new WebClient();
-                if (File.Exists(LOCAL_IMAGE_FILE_JPG))
+                if (IsInternetAvailable())
                 {
-                    File.Delete(LOCAL_IMAGE_FILE_JPG);
+                    WebClient webClient = new WebClient();
+                    webClient.DownloadFile(url, LOCAL_IMAGE_FILE_JPG);
                 }
-                webClient.DownloadFile(url, LOCAL_IMAGE_FILE_JPG);
             }
             catch { }
         }
