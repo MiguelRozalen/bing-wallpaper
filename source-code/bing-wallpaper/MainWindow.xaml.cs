@@ -36,16 +36,21 @@ namespace bing_wallpaper
             InitializeComponent();
             this.DataContext = this;
 
+            cmbLocation.ItemsSource = typeof(Colors).GetProperties();
+            cmbExecution.ItemsSource = typeof(Colors).GetProperties();
+
             string info = bing_object?.images?.FirstOrDefault()?.copyright;
             if (info != null)
             {
                 Text_copyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
                 Text_title = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
             }
+#if !DEBUG
             Minimize();
+#endif
         }
 
-        #region Properties
+#region Properties
 
         private string text_title;
         private string text_copyright;
@@ -78,9 +83,9 @@ namespace bing_wallpaper
                 return _doubleClickCommandTaskBarIcon ?? (_doubleClickCommandTaskBarIcon = new CommandHandler(() => ActionDoubleClickCommandTaskBarIcon(), true));
             }
         }
-        #endregion
+#endregion
 
-        #region Functions
+#region Functions
         public void SetBingWallpaper(string location = "en-US")
         {
             try
@@ -113,9 +118,9 @@ namespace bing_wallpaper
             this.ShowInTaskbar = true;
             SystemCommands.RestoreWindow(this);
         }
-        #endregion
+#endregion
 
-        #region EventHandlers
+#region EventHandlers
         private void RaisePropertyChanged(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
@@ -177,7 +182,7 @@ namespace bing_wallpaper
                 TabControl tab = sender as TabControl;
                 TabItem item = tab?.SelectedItem as TabItem;
                 
-                if (item != null)
+                if (item != null && e.Source.GetType()==typeof(TabControl))
                 {
                     DoubleAnimation animation_width = new DoubleAnimation(item.Width, item.Width * 0.965,
                         new Duration(new TimeSpan(0, 0, 0, 0, 230)));
@@ -206,6 +211,6 @@ namespace bing_wallpaper
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
-        #endregion
+#endregion
     }
 }

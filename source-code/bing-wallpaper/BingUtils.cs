@@ -46,20 +46,11 @@ namespace bing_wallpaper
             return result;
         }
 
-        [DllImport("wininet.dll")]
-        private extern static bool InternetGetConnectedState(out int description, int reservedValue);
-
-        public static bool IsInternetAvailable()
-        {
-            int description;
-            return InternetGetConnectedState(out description, 0);
-        }
-
         private static void Step2_DownloadImageFile(string url)
         {
             try
             {
-                if (IsInternetAvailable())
+                if (Utils.IsInternetAvailable())
                 {
                     WebClient webClient = new WebClient();
                     webClient.DownloadFile(url, LOCAL_IMAGE_FILE_JPG);
