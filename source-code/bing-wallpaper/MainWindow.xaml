@@ -9,7 +9,9 @@
         Title="Bing Wallpaper" MinHeight="295" Height="295" Width="675.5" MinWidth="675.5" Icon="images/bing-wallpaper-icon.ico" ResizeMode="CanMinimize" Closing="Window_Closing" ShowInTaskbar="False" StateChanged="Window_StateChanged">
     <Window.Resources>
         <SolidColorBrush x:Key="SolidBorderBrush" Color="#FFB900" />
+        <SolidColorBrush x:Key="SolidBorderBrushHard" Color="#e6a700" />
         <SolidColorBrush x:Key="SoftGrey" Color="#9c9c9c" />
+        
         <Style TargetType="{x:Type TabItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -63,6 +65,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style TargetType="{x:Type Hyperlink}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -234,8 +237,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        
+
         <Style x:Key="{x:Type CheckBox}" TargetType="CheckBox">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -252,25 +254,28 @@
                                   BorderThickness="1"
                                   BorderBrush="Gray">
                                     <Path 
-                                        Width="7" Height="7" 
+                                        Width="8" Height="8" 
                                         x:Name="CheckMark"
                                         SnapsToDevicePixels="False" 
                                         Stroke="{StaticResource SolidBorderBrush}"
                                         StrokeThickness="2"
-                                        Data="M 0 0 L 7 7 M 0 7 L 7 0" />       
+                                        Data="M 0 3.5 L 3 7 L 8 0" />
                                 </Border>
                             </BulletDecorator.Bullet>
                             <ContentPresenter Margin="4,0,0,0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left"
-                                    RecognizesAccessKey="True"/>        
+                                    RecognizesAccessKey="True"/>
                         </BulletDecorator>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="false">
                                 <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
                             </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SoftGrey}"/>
+                            </Trigger>
                             <Trigger Property="IsChecked" Value="{x:Null}">
-                                <Setter TargetName="CheckMark" Property="Data" Value="M 0 7 L 7 0" />
+                                <Setter TargetName="CheckMark" Property="Data" Value="M 0 0 L 7 7 M 0 7 L 7 0" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="Border" Property="Background" Value="AntiqueWhite" />
@@ -284,7 +289,98 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+      
+        <Style x:Key="ButtonApply" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{StaticResource SolidBorderBrush}" Cursor="Hand" BorderThickness="1" Background="{StaticResource SolidBorderBrush}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Cursor="Hand"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource SolidBorderBrushHard}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource SolidBorderBrushHard}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <Style x:Key="ButtonCancel" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{StaticResource SoftGrey}" Cursor="Hand" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter"  Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Cursor="Hand"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="Gray"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -388,41 +484,34 @@
                         <RowDefinition Height="2*"></RowDefinition>
                         <RowDefinition Height="2*" IsEnabled="False"></RowDefinition>
                         <RowDefinition Height="2*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="1.7*"></RowDefinition>
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Text="Aplication Settings" Margin="10,0,0,15" VerticalAlignment="Bottom"  />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Execution Period" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <ComboBox Grid.Row="2" Grid.Column="1" MinWidth="150" HorizontalAlignment="Left" Margin="0,0,5,6" Name="cmbExecution">
+                    <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Image Location" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+                    <ComboBox Grid.Row="2" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" 
+                              ItemsSource="{Binding LanguageOptions}" SelectionChanged="cmbLocation_SelectionChanged" Name="cmbLocation">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}" />
+                                    <TextBlock Text="{Binding EnglishName}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Image Location" Margin="10,0,0,10" VerticalAlignment="Bottom" />
-                    <ComboBox Grid.Row="3" Grid.Column="1" MinWidth="150" HorizontalAlignment="Left" Margin="0,0,5,6" Name="cmbLocation">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    
+                    <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Execution Period" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                    <ComboBox Grid.Row="3" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" Name="cmbExecution"/>
+
                     <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Run at Startup" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <CheckBox Grid.Row="4" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    
+                    <CheckBox  Grid.Row="4" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding RunAtStartup}"/>
+
                     <TextBlock Grid.Row="5" Grid.Column="0" FontSize="13" Text="Set Wallpaper" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <CheckBox Grid.Row="5" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    
-                    <TextBlock Grid.Row="6" Grid.Column="0" FontSize="13" Text="Set Lock Screen" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <CheckBox Grid.Row="6" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox  Grid.Row="5" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding SetWallpaper}"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" FontSize="13" Text="Set Lock Screen" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+                    <CheckBox  Grid.Row="6" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" IsChecked="{Binding SetLockScreen}"/>
 
                     <Grid Grid.Row="7" Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -430,10 +519,14 @@
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
-                        <Button Margin="0,0,10,0"  Grid.Column="1"></Button>
-                        <Button Margin="0,0,10,0" Grid.Column="2"></Button>
+                        <Button Margin="0,8,10,-5"  Grid.Column="0" Style="{DynamicResource ButtonCancel}">
+                            <TextBlock FontSize="14">Reset</TextBlock>
+                        </Button>
+                        <Button Margin="0,8,10,-5" Grid.Column="1" Style="{DynamicResource ButtonApply}">
+                            <TextBlock FontSize="14" Foreground="White">Apply</TextBlock>
+                        </Button>
                     </Grid>
-                   
+
                 </Grid>
             </TabItem>
             <TabItem FontSize="13" Width="150" Height="40" BorderBrush="{x:Null}">
@@ -518,7 +611,7 @@
                         <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Licence" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                         <TextBlock Grid.Row="4" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                     </Grid>
-                  </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
         <tb:TaskbarIcon x:Name="myNotifyIcon" Visibility="Visible"  DataContext="{Binding}" DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"

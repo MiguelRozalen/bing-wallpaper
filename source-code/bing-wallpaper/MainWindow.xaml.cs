@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -30,14 +31,28 @@ namespace bing_wallpaper
 
         public MainWindow()
         {
-            SetBingWallpaper("es-ES");
-            //SetBingWallpaper();
-
+            //string defaultLanguage = "es-ES";
+            string defaultLanguage = CultureInfo.CurrentCulture.Name;
+            SetBingWallpaper(defaultLanguage);
+            
             InitializeComponent();
             this.DataContext = this;
 
-            cmbLocation.ItemsSource = typeof(Colors).GetProperties();
-            cmbExecution.ItemsSource = typeof(Colors).GetProperties();
+            CultureInfo[] ci = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).ToArray();
+            languageOptions.AddRange(ci.Where(p=>p.Name.Length==5).ToArray());
+            languageOptions.OrderByDescending(p => p.EnglishName);
+            cmbLocation.SelectedIndex = languageOptions.IndexOf(languageOptions.Where(p => p.Name == defaultLanguage).FirstOrDefault());
+
+            List<string> execution = new List<string>()
+            {
+                "Every Day",
+                "Every Week",
+                "Every Month",
+                "Every 3 Months",
+                "Never More"
+            };
+            cmbExecution.ItemsSource = execution;
+            cmbExecution.SelectedIndex = 0;
 
             string info = bing_object?.images?.FirstOrDefault()?.copyright;
             if (info != null)
@@ -54,6 +69,51 @@ namespace bing_wallpaper
 
         private string text_title;
         private string text_copyright;
+        private bool runAtStartup;
+        private bool setWallpaper;
+        private bool setLockScreen;
+        private List<CultureInfo> languageOptions = new List<CultureInfo>();
+
+        public List<CultureInfo> LanguageOptions
+        {
+            get { return languageOptions; }
+            set
+            {
+                languageOptions = value;
+                RaisePropertyChanged("LanguageOptions");
+            }
+        }
+
+        public bool RunAtStartup
+        {
+            get { return runAtStartup; }
+            set
+            {
+                runAtStartup = value;
+                RaisePropertyChanged("RunAtStartup");
+            }
+        }
+
+        public bool SetLockScreen
+        {
+            get { return setLockScreen; }
+            set
+            {
+                setLockScreen = value;
+                RaisePropertyChanged("SetLockScreen");
+            }
+        }
+
+        public bool  SetWallpaper
+        {
+            get { return setWallpaper; }
+            set
+            {
+                setWallpaper = value;
+                RaisePropertyChanged("SetWallpaper");
+            }
+        }
+
 
         public string Text_title
         {
@@ -86,7 +146,7 @@ namespace bing_wallpaper
 #endregion
 
 #region Functions
-        public void SetBingWallpaper(string location = "en-US")
+        public void SetBingWallpaper(string location)
         {
             try
             {
@@ -211,6 +271,13 @@ namespace bing_wallpaper
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
-#endregion
+        #endregion
+
+        private void cmbLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox tab = sender as ComboBox;
+            CultureInfo item = tab?.SelectedItem as CultureInfo;
+            Debug.Print(item.Name);
+        }
     }
 }
