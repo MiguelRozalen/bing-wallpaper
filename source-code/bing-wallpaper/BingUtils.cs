@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 
 namespace bing_wallpaper
 {
@@ -13,37 +12,47 @@ namespace bing_wallpaper
         public const string BING_IMG_URL_JSON = "http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=";
         public const string BING_URL = "http://www.bing.com";
         private static string LOCAL_IMAGE_FILE_JPG = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.jpg";
-        private static string LOCAL_CONFIGURATION_FILE_XML = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.xml";
-        public static BingObject ACTUAL_BING_OBJECT = null;
-
+        public static string LOCAL_CONFIGURATION_FILE_JSON = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.json";
+        
         private static BingObject Step1_DownloadBingConfigFile(string location)
         {
-            BingObject result = null;
+            BingObject newBingObject = null, actualBingObject = null;
             string json = string.Empty;
             try
             {
                 string url = string.Format("{0}{1}", BING_IMG_URL_JSON, location);
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
+                if (Utils.IsInternetAvailable())
                 {
-                    json = reader.ReadToEnd();
-                    if (File.Exists(LOCAL_CONFIGURATION_FILE_XML))
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
                     {
-                        File.Delete(LOCAL_CONFIGURATION_FILE_XML);
+                        json = reader.ReadToEnd();
+                        newBingObject = JsonConvert.DeserializeObject<BingObject>(json);
+
+                        if (File.Exists(LOCAL_CONFIGURATION_FILE_JSON))
+                        {
+                            string fileJson = File.ReadAllText(LOCAL_CONFIGURATION_FILE_JSON);
+                            actualBingObject = JsonConvert.DeserializeObject<BingObject>(fileJson);
+                            newBingObject.config = actualBingObject.config;
+                            File.Delete(LOCAL_CONFIGURATION_FILE_JSON);
+                        }
+                        File.AppendAllText(LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(newBingObject));
                     }
-                    File.AppendAllText(LOCAL_CONFIGURATION_FILE_XML, json);
+                }
+                else
+                {
+                    throw new WebException();
                 }
             }
             catch
             {
                 //Fallo en la red, obtenemos el temporal
-                json = File.ReadAllText(LOCAL_CONFIGURATION_FILE_XML);
+                json = File.ReadAllText(LOCAL_CONFIGURATION_FILE_JSON);
+                newBingObject = JsonConvert.DeserializeObject<BingObject>(json);
             }
-            result = JsonConvert.DeserializeObject<BingObject>(json);
-            return result;
+            return newBingObject;
         }
 
         private static void Step2_DownloadImageFile(string url)
@@ -59,6 +68,15 @@ namespace bing_wallpaper
             catch { }
         }
 
+        public static BingObject ReadConfig()
+        {
+            if (File.Exists(LOCAL_CONFIGURATION_FILE_JSON))
+            {
+                string fileJson = File.ReadAllText(LOCAL_CONFIGURATION_FILE_JSON);
+                return JsonConvert.DeserializeObject<BingObject>(fileJson);
+            }
+            return null;
+        }
         public static string GetWallpaperFromBing(string location, ref BingObject bingObject)
         {
             bingObject = Step1_DownloadBingConfigFile(location);

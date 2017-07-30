@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BingConfig.cs" />
     <Compile Include="BingImage.cs" />
     <Compile Include="BingObject.cs" />
     <Compile Include="BingTooltip.cs" />

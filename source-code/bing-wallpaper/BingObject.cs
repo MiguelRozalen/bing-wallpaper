@@ -10,6 +10,7 @@ namespace bing_wallpaper
     {
         public IList<BingImage> images { get; set; }
         public BingTooltip tooltips { get; set; }
+        public BingConfig config { get; set; }
 
         public BingObject() { }
     }

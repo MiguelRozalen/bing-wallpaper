@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -28,11 +30,35 @@ namespace bing_wallpaper
     {
         private static string bing_image_file = null;
         private static BingObject bing_object = null;
+        private static List<string> execution_periods = null;
+        private static string defaultLanguage = null;
+        private static string defaultPeriod = null;
+        private static bool defaultRunAtStartup = false;
+        private static bool defaultSetWallpaper = false;
+        private static bool defaultSetLockScreen = false;
 
         public MainWindow()
         {
             //string defaultLanguage = "es-ES";
-            string defaultLanguage = CultureInfo.CurrentCulture.Name;
+            bing_object = BingUtils.ReadConfig();
+
+            if (bing_object?.config != null)
+            {
+                defaultLanguage = bing_object.config.languageOptions.Name;
+                defaultPeriod= bing_object.config.period;
+                defaultRunAtStartup = bing_object.config.runAtStartup;
+                defaultSetWallpaper = bing_object.config.setWallpaper;
+                defaultSetLockScreen = bing_object.config.setLockScreen;
+            }
+            else
+            {
+                defaultLanguage = CultureInfo.CurrentCulture.Name;
+                defaultPeriod = "Every Day";
+                defaultRunAtStartup = false;
+                defaultSetWallpaper = false;
+                defaultSetLockScreen = false;
+            }
+
             SetBingWallpaper(defaultLanguage);
             
             InitializeComponent();
@@ -43,7 +69,7 @@ namespace bing_wallpaper
             languageOptions.OrderByDescending(p => p.EnglishName);
             cmbLocation.SelectedIndex = languageOptions.IndexOf(languageOptions.Where(p => p.Name == defaultLanguage).FirstOrDefault());
 
-            List<string> execution = new List<string>()
+            execution_periods = new List<string>()
             {
                 "Every Day",
                 "Every Week",
@@ -51,8 +77,12 @@ namespace bing_wallpaper
                 "Every 3 Months",
                 "Never More"
             };
-            cmbExecution.ItemsSource = execution;
-            cmbExecution.SelectedIndex = 0;
+            cmbExecution.ItemsSource = execution_periods;
+            cmbExecution.SelectedIndex = execution_periods.IndexOf(defaultPeriod);
+
+            runAtStartup = defaultRunAtStartup;
+            setWallpaper = defaultSetWallpaper;
+            setLockScreen = defaultSetLockScreen;
 
             string info = bing_object?.images?.FirstOrDefault()?.copyright;
             if (info != null)
@@ -278,6 +308,37 @@ namespace bing_wallpaper
             ComboBox tab = sender as ComboBox;
             CultureInfo item = tab?.SelectedItem as CultureInfo;
             Debug.Print(item.Name);
+        }
+
+        private void Button_Click_Reset(object sender, RoutedEventArgs e)
+        {
+            cmbLocation.SelectedIndex = languageOptions.IndexOf(languageOptions.Where(p => p.Name == CultureInfo.CurrentCulture.Name).FirstOrDefault());
+            cmbExecution.SelectedIndex = execution_periods.IndexOf("Every Day");
+            startup_box.IsChecked = true;
+            wallpaper_box.IsChecked = true;
+            lock_box.IsChecked = false;
+
+            MessageBox.Show("Preferences reset!", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+        }
+
+        private void Button_Click_Apply(object sender, RoutedEventArgs e)
+        {
+            bing_object.config = new BingConfig()
+            {
+                languageOptions = cmbLocation.SelectedItem as CultureInfo,
+                period = cmbExecution.SelectedItem as string,
+                runAtStartup = runAtStartup,
+                setLockScreen = setLockScreen,
+                setWallpaper = setWallpaper,
+            };
+
+            if (File.Exists(BingUtils.LOCAL_CONFIGURATION_FILE_JSON))
+            {
+                File.Delete(BingUtils.LOCAL_CONFIGURATION_FILE_JSON);
+            }
+            File.AppendAllText(BingUtils.LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(bing_object));
+
+            MessageBox.Show("Preferences saved sucessfully!", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
         }
     }
 }
