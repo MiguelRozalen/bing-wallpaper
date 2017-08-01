@@ -20,6 +20,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace bing_wallpaper
 {
@@ -28,89 +29,93 @@ namespace bing_wallpaper
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static string bing_image_file = null;
-        private static BingObject bing_object = null;
-        private static List<string> execution_periods = null;
+        private static string bingImageFile = null;
+        private static BingObject bingObject = null;
         private static string defaultLanguage = null;
         private static string defaultPeriod = null;
         private static bool defaultRunAtStartup = false;
         private static bool defaultSetWallpaper = false;
         private static bool defaultSetLockScreen = false;
 
+
         public MainWindow()
         {
-            //string defaultLanguage = "es-ES";
-            bing_object = BingUtils.ReadConfig();
+            InitializeComponent();
+            this.DataContext = this;
 
-            if (bing_object?.config != null)
+            bingObject = BingUtils.ReadConfig();
+            InitializeSettingsTab();
+
+            SetBingWallpaper(defaultLanguage);
+
+            Minimize();
+        }
+
+        private void InitializeSettingsTab()
+        {
+            if (bingObject?.config != null)
             {
-                defaultLanguage = bing_object.config.languageOptions.Name;
-                defaultPeriod= bing_object.config.period;
-                defaultRunAtStartup = bing_object.config.runAtStartup;
-                defaultSetWallpaper = bing_object.config.setWallpaper;
-                defaultSetLockScreen = bing_object.config.setLockScreen;
+                defaultLanguage = bingObject.config.languageOptions.Name;
+                defaultPeriod = bingObject.config.period;
+                defaultRunAtStartup = bingObject.config.runAtStartup;
+                defaultSetWallpaper = bingObject.config.setWallpaper;
+                defaultSetLockScreen = bingObject.config.setLockScreen;
             }
             else
             {
                 defaultLanguage = CultureInfo.CurrentCulture.Name;
                 defaultPeriod = "Every Day";
-                defaultRunAtStartup = false;
-                defaultSetWallpaper = false;
+                defaultRunAtStartup = true;
+                defaultSetWallpaper = true;
                 defaultSetLockScreen = false;
             }
 
-            SetBingWallpaper(defaultLanguage);
-            
-            InitializeComponent();
-            this.DataContext = this;
+            cmbLocation.SelectedIndex = LanguageOptions.IndexOf(LanguageOptions.Where(p => p.Name == defaultLanguage).FirstOrDefault());
+            cmbExecution.SelectedIndex = ExecutionPeriods.IndexOf(defaultPeriod);
+            RunAtStartup = defaultRunAtStartup;
+            SetWallpaper = defaultSetWallpaper;
+            SetLockScreen = defaultSetLockScreen;
 
-            CultureInfo[] ci = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).ToArray();
-            languageOptions.AddRange(ci.Where(p=>p.Name.Length==5).ToArray());
-            languageOptions.OrderByDescending(p => p.EnglishName);
-            cmbLocation.SelectedIndex = languageOptions.IndexOf(languageOptions.Where(p => p.Name == defaultLanguage).FirstOrDefault());
-
-            execution_periods = new List<string>()
-            {
-                "Every Day",
-                "Every Week",
-                "Every Month",
-                "Every 3 Months",
-                "Never More"
-            };
-            cmbExecution.ItemsSource = execution_periods;
-            cmbExecution.SelectedIndex = execution_periods.IndexOf(defaultPeriod);
-
-            runAtStartup = defaultRunAtStartup;
-            setWallpaper = defaultSetWallpaper;
-            setLockScreen = defaultSetLockScreen;
-
-            string info = bing_object?.images?.FirstOrDefault()?.copyright;
-            if (info != null)
-            {
-                Text_copyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
-                Text_title = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
-            }
-#if !DEBUG
-            Minimize();
-#endif
+            RunAtStartup_Box.IsChecked = defaultRunAtStartup;
+            SetWallpaper_Box.IsChecked = defaultSetWallpaper;
+            SetLockScreen_Box.IsChecked = defaultSetLockScreen;
         }
 
-#region Properties
+        #region Properties
 
-        private string text_title;
-        private string text_copyright;
+        private string textTitle;
+        private string textCopyright;
         private bool runAtStartup;
         private bool setWallpaper;
         private bool setLockScreen;
-        private List<CultureInfo> languageOptions = new List<CultureInfo>();
+        private List<CultureInfo> languageOptions;
 
         public List<CultureInfo> LanguageOptions
         {
-            get { return languageOptions; }
+            get {
+                if(languageOptions == null) { 
+                    CultureInfo[] ci = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).ToArray();
+                    languageOptions = new List<CultureInfo>();
+                    languageOptions.AddRange(ci.Where(p => p.Name.Length == 5).ToArray());
+                    languageOptions = languageOptions.OrderBy(p => p.EnglishName).ToList();
+                }
+                return languageOptions;
+            }
             set
             {
                 languageOptions = value;
                 RaisePropertyChanged("LanguageOptions");
+            }
+        }
+
+        public List<string> executionPeriods = new List<string>() { "Every Day", "Every Week", "Every Month", "Every 3 Months", "Never More" };
+        public List<string> ExecutionPeriods
+        {
+            get { return executionPeriods; }
+            set
+            {
+                executionPeriods = value;
+                RaisePropertyChanged("ExecutionPeriods");
             }
         }
 
@@ -134,7 +139,7 @@ namespace bing_wallpaper
             }
         }
 
-        public bool  SetWallpaper
+        public bool SetWallpaper
         {
             get { return setWallpaper; }
             set
@@ -145,23 +150,23 @@ namespace bing_wallpaper
         }
 
 
-        public string Text_title
+        public string TextTitle
         {
-            get { return text_title; }
+            get { return textTitle; }
             set
             {
-                text_title = value;
-                RaisePropertyChanged("Text_title");
+                textTitle = value;
+                RaisePropertyChanged("TextTitle");
             }
         }
- 
-        public string Text_copyright
+
+        public string TextCopyright
         {
-            get { return text_copyright; }
+            get { return textCopyright; }
             set
             {
-                text_copyright = value;
-                RaisePropertyChanged("Text_copyright");
+                textCopyright = value;
+                RaisePropertyChanged("TextCopyright");
             }
         }
 
@@ -173,23 +178,19 @@ namespace bing_wallpaper
                 return _doubleClickCommandTaskBarIcon ?? (_doubleClickCommandTaskBarIcon = new CommandHandler(() => ActionDoubleClickCommandTaskBarIcon(), true));
             }
         }
-#endregion
+        #endregion
 
-#region Functions
+        #region Functions
         public void SetBingWallpaper(string location)
         {
-            try
+            bingImageFile = BingUtils.GetWallpaperFromBing(location, ref bingObject);
+            Utils.SetWallpaper(bingImageFile);
+            
+            string info = bingObject?.images?.FirstOrDefault()?.copyright;
+            if (info != null)
             {
-                bing_image_file = BingUtils.GetWallpaperFromBing(location, ref bing_object);
-                if (bing_image_file != null)
-                {
-                    Utils.SetWallpaper(bing_image_file);
-                }
-            }
-            catch (System.Net.WebException)
-            {
-                Thread.Sleep(60 * 1000 * 5);
-                SetBingWallpaper(location);
+                TextCopyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
+                TextTitle = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
             }
         }
 
@@ -208,34 +209,46 @@ namespace bing_wallpaper
             this.ShowInTaskbar = true;
             SystemCommands.RestoreWindow(this);
         }
-#endregion
+        #endregion
 
-#region EventHandlers
+        #region GenericEventHandlers
         private void RaisePropertyChanged(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        #endregion
 
+        #region WindowEvents
         private void Window_StateChanged(object sender, EventArgs e)
         {
             switch (this.WindowState)
             {
                 case WindowState.Minimized:
-                    Minimize(); 
+                    Minimize();
                     break;
             }
         }
-        private void image_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Minimize();
+        }
+        #endregion
+
+        #region ImageEvents
+        private void LoadImage(object sender, RoutedEventArgs e)
         {
             Image img = sender as Image;
             img.Stretch = Stretch.Fill;
-            img.Source = new BitmapImage(new Uri(bing_image_file, UriKind.RelativeOrAbsolute));
+            img.Source = new BitmapImage(new Uri(bingImageFile, UriKind.RelativeOrAbsolute));
         }
+        #endregion
 
+        #region Menu & Tooltip Events
         public void ActionDoubleClickCommandTaskBarIcon()
         {
-            if(this.WindowState == WindowState.Minimized)
+            if (this.WindowState == WindowState.Minimized)
             {
                 MaximizeOrNormal();
             }
@@ -244,13 +257,6 @@ namespace bing_wallpaper
                 Minimize();
             }
         }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            e.Cancel = true;
-            Minimize();
-        }
-
         private void MenuItem_Click_Exit(object sender, RoutedEventArgs e)
         {
             Environment.Exit(0);
@@ -264,15 +270,17 @@ namespace bing_wallpaper
             }
             e.Handled = true;
         }
+        #endregion
 
+        #region TabEvents
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {   
+        {
             if (this.WindowState != WindowState.Minimized)
             {
                 TabControl tab = sender as TabControl;
                 TabItem item = tab?.SelectedItem as TabItem;
-                
-                if (item != null && e.Source.GetType()==typeof(TabControl))
+
+                if (item != null && e.Source.GetType() == typeof(TabControl))
                 {
                     DoubleAnimation animation_width = new DoubleAnimation(item.Width, item.Width * 0.965,
                         new Duration(new TimeSpan(0, 0, 0, 0, 230)));
@@ -295,7 +303,9 @@ namespace bing_wallpaper
                 }
             }
         }
+        #endregion
 
+        #region HyperLinkEvents
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
@@ -303,42 +313,38 @@ namespace bing_wallpaper
         }
         #endregion
 
-        private void cmbLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox tab = sender as ComboBox;
-            CultureInfo item = tab?.SelectedItem as CultureInfo;
-            Debug.Print(item.Name);
-        }
-
+        #region ButonClickEvents
         private void Button_Click_Reset(object sender, RoutedEventArgs e)
         {
-            cmbLocation.SelectedIndex = languageOptions.IndexOf(languageOptions.Where(p => p.Name == CultureInfo.CurrentCulture.Name).FirstOrDefault());
-            cmbExecution.SelectedIndex = execution_periods.IndexOf("Every Day");
-            startup_box.IsChecked = true;
-            wallpaper_box.IsChecked = true;
-            lock_box.IsChecked = false;
-
-            MessageBox.Show("Preferences reset!", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+            bingObject.config = null;
+            InitializeSettingsTab();
+            MessageBox.Show("Preferences will be reset! Please click on 'Apply' button to save changes.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None);
         }
 
         private void Button_Click_Apply(object sender, RoutedEventArgs e)
         {
-            bing_object.config = new BingConfig()
+            bingObject.config = new BingConfig()
             {
                 languageOptions = cmbLocation.SelectedItem as CultureInfo,
                 period = cmbExecution.SelectedItem as string,
-                runAtStartup = runAtStartup,
-                setLockScreen = setLockScreen,
-                setWallpaper = setWallpaper,
+                runAtStartup = RunAtStartup,
+                setLockScreen = SetLockScreen,
+                setWallpaper = SetWallpaper,
             };
 
             if (File.Exists(BingUtils.LOCAL_CONFIGURATION_FILE_JSON))
             {
                 File.Delete(BingUtils.LOCAL_CONFIGURATION_FILE_JSON);
             }
-            File.AppendAllText(BingUtils.LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(bing_object));
+            File.AppendAllText(BingUtils.LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(bingObject));
 
-            MessageBox.Show("Preferences saved sucessfully!", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+            //SetBingWallpaper(bingObject.config.languageOptions.Name);
+
+            MessageBox.Show("Preferences have been saved sucessfully! Bing Wallpaper should be restarted for commit changes.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None);
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
+        #endregion
+        
     }
 }

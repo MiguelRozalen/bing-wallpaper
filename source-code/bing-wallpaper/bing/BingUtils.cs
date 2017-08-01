@@ -79,10 +79,16 @@ namespace bing_wallpaper
         }
         public static string GetWallpaperFromBing(string location, ref BingObject bingObject)
         {
-            bingObject = Step1_DownloadBingConfigFile(location);
-            string url = string.Format("{0}{1}", BING_URL, bingObject?.images?.FirstOrDefault()?.url);
-            Debug.Print("La imagen está en: {0}", url);
-            Step2_DownloadImageFile(url);
+            try
+            {
+                bingObject = Step1_DownloadBingConfigFile(location);
+                string url = string.Format("{0}{1}", BING_URL, bingObject?.images?.FirstOrDefault()?.url);
+                Debug.Print("La imagen está en: {0}", url);
+                Step2_DownloadImageFile(url);
+            }
+            catch(Exception ex) {
+                Debug.Print(ex.Message);
+            }
             return LOCAL_IMAGE_FILE_JPG;
         }
     }

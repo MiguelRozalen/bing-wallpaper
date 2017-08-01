@@ -420,7 +420,7 @@
                 </TabItem.Style>
 
                 <Grid>
-                    <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="image_Loaded"/>
+                    <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="LoadImage"/>
                     <Grid Margin="0,0,20,19.667" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
                         <Grid.Background>
                             <SolidColorBrush Color="Black" Opacity="0.6"/>
@@ -430,9 +430,9 @@
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Text_title}" />
+                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding TextTitle}" />
                         <TextBlock Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Text_copyright}"/>
+                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding TextCopyright}"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -491,7 +491,7 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Image Location" Margin="10,0,0,10" VerticalAlignment="Bottom" />
                     <ComboBox Grid.Row="2" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" 
-                              ItemsSource="{Binding LanguageOptions}" SelectionChanged="cmbLocation_SelectionChanged" Name="cmbLocation">
+                              ItemsSource="{Binding LanguageOptions}"  Name="cmbLocation">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -502,16 +502,24 @@
                     </ComboBox>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Execution Period" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <ComboBox Grid.Row="3" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" Name="cmbExecution"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" Name="cmbExecution" ItemsSource="{Binding ExecutionPeriods}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Run at Startup" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <CheckBox Name="startup_box" Grid.Row="4" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding RunAtStartup}"/>
+                    <CheckBox Name="RunAtStartup_Box" Grid.Row="4"  Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding RunAtStartup}"/>
 
                     <TextBlock Grid.Row="5" Grid.Column="0" FontSize="13" Text="Set Wallpaper" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                    <CheckBox Name="wallpaper_box" Grid.Row="5" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding SetWallpaper}"/>
+                    <CheckBox Name="SetWallpaper_Box" Grid.Row="5" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding SetWallpaper}"/>
 
                     <TextBlock Grid.Row="6" Grid.Column="0" FontSize="13" Text="Set Lock Screen" Margin="10,0,0,10" VerticalAlignment="Bottom" />
-                    <CheckBox Name="lock_box" Grid.Row="6" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" IsChecked="{Binding SetLockScreen}"/>
+                    <CheckBox Name="SetLockScreen_Box" Grid.Row="6" Grid.Column="1" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" IsChecked="{Binding SetLockScreen}"/>
 
                     <Grid Grid.Row="7" Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -599,17 +607,17 @@
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Text="0.17.7.29" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Text="22/07/2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Text="0.17.8.1" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <!--<TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom"  ><Run Text="0"/><Run Text="1"/><Run Text="/0"/><Run Text="8"/><Run Text="/2017"/></TextBlock>-->
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
                             <Hyperlink NavigateUri="https://github.com/MiguelRozalen/bing-wallpaper" RequestNavigate="Hyperlink_RequestNavigate">
                                 https://github.com/MiguelRozalen/bing-wallpaper
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Licence" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Copyright" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                     </Grid>
                 </Grid>
             </TabItem>
@@ -633,9 +641,9 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" x:Name="textBlock3" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding Text_title}" />
+                                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding TextTitle}" />
                     <TextBlock Grid.Row="1" x:Name="textBlock4" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding Text_copyright}"/>
+                                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding TextCopyright}"/>
                 </Grid>
             </tb:TaskbarIcon.TrayToolTip>
         </tb:TaskbarIcon>

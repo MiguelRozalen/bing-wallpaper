@@ -82,13 +82,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BingConfig.cs" />
-    <Compile Include="BingImage.cs" />
-    <Compile Include="BingObject.cs" />
-    <Compile Include="BingTooltip.cs" />
-    <Compile Include="BingUtils.cs" />
-    <Compile Include="CommandHandler.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="bing\BingConfig.cs" />
+    <Compile Include="bing\BingImage.cs" />
+    <Compile Include="bing\BingObject.cs" />
+    <Compile Include="bing\BingTooltip.cs" />
+    <Compile Include="bing\BingUtils.cs" />
+    <Compile Include="utils\CommandHandler.cs" />
+    <Compile Include="utils\Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
