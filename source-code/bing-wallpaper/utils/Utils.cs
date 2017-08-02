@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 
@@ -30,7 +32,6 @@ namespace bing_wallpaper
         {
             int description;
             return InternetGetConnectedState(out description, 0);
-        }
-
+        }        
     }
 }

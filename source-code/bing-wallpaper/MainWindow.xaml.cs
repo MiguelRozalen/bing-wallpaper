@@ -338,7 +338,10 @@ namespace bing_wallpaper
             }
             File.AppendAllText(BingUtils.LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(bingObject));
 
-            //SetBingWallpaper(bingObject.config.languageOptions.Name);
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "BingWallpaperServiceManager.exe";
+            startInfo.Arguments = string.Format("{0} {1} {2} {3}", "BingWallpaper2", "", runAtStartup.ToString(), cmbExecution.SelectedItem as string);
+            Process.Start(startInfo).WaitForExit();
 
             MessageBox.Show("Preferences have been saved sucessfully! Bing Wallpaper should be restarted for commit changes.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None);
             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);

@@ -531,7 +531,12 @@
                             <TextBlock FontSize="14">Reset</TextBlock>
                         </Button>
                         <Button Margin="0,8,10,-5" Grid.Column="1" Style="{DynamicResource ButtonApply}" Click="Button_Click_Apply">
-                            <TextBlock FontSize="14" Foreground="White">Apply</TextBlock>
+                            <DockPanel>
+                                <Image Source="images/bing-icon-white.ico" Margin="-5,0,3,0"/>
+                                <TextBlock VerticalAlignment="Center" Margin="0,0,0,3" FontSize="14" Foreground="White">Apply</TextBlock>
+                            </DockPanel>
+
+                            
                         </Button>
                     </Grid>
 
@@ -607,7 +612,7 @@
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Text="0.17.8.1" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom"  ><Run Text="0.17.8."/><Run Text="2"/></TextBlock>
                         <!--<TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                         <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom"  ><Run Text="0"/><Run Text="1"/><Run Text="/0"/><Run Text="8"/><Run Text="/2017"/></TextBlock>-->
                         <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
