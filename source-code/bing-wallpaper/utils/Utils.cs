@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Media;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.System.UserProfile;
 
 namespace bing_wallpaper
 {
@@ -20,10 +21,23 @@ namespace bing_wallpaper
             try
             {
                 SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, local_file_uri, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
+                result = true;
             }
             catch { }
             return result;
         }
+
+        public static bool SetLockScreen(string local_file_uri)
+        {
+            bool result = false;
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception e) { }
+            return result;
+        }
+
 
         [DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int description, int reservedValue);

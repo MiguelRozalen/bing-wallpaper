@@ -36,12 +36,13 @@ namespace bing_wallpaper
         private static bool defaultRunAtStartup = false;
         private static bool defaultSetWallpaper = false;
         private static bool defaultSetLockScreen = false;
-
-
+        
         public MainWindow()
         {
+            CloseSameProcesses();
+
             InitializeComponent();
-            this.DataContext = this;
+            this.DataContext = this;          
 
             bingObject = BingUtils.ReadConfig();
             InitializeSettingsTab();
@@ -49,6 +50,19 @@ namespace bing_wallpaper
             SetBingWallpaper(defaultLanguage);
 
             Minimize();
+        }
+
+        private static void CloseSameProcesses()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+            Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
+            if (processes.Length > 1)
+            {
+                for (int i = 0; i < processes.Length - 1; i++)
+                {
+                    processes[i].Kill();
+                }
+            }
         }
 
         private void InitializeSettingsTab()
@@ -92,8 +106,10 @@ namespace bing_wallpaper
 
         public List<CultureInfo> LanguageOptions
         {
-            get {
-                if(languageOptions == null) { 
+            get
+            {
+                if (languageOptions == null)
+                {
                     CultureInfo[] ci = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).ToArray();
                     languageOptions = new List<CultureInfo>();
                     languageOptions.AddRange(ci.Where(p => p.Name.Length == 5).ToArray());
@@ -185,7 +201,11 @@ namespace bing_wallpaper
         {
             bingImageFile = BingUtils.GetWallpaperFromBing(location, ref bingObject);
             Utils.SetWallpaper(bingImageFile);
-            
+            if (bingObject != null && bingObject.config != null && bingObject.config.setLockScreen)
+            {
+                Utils.SetLockScreen(bingImageFile);
+            }
+
             string info = bingObject?.images?.FirstOrDefault()?.copyright;
             if (info != null)
             {
@@ -340,14 +360,24 @@ namespace bing_wallpaper
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "BingWallpaperServiceManager.exe";
+#if DEBUG
             startInfo.Arguments = string.Format("{0} {1} {2} {3}", "BingWallpaper2", "", runAtStartup.ToString(), cmbExecution.SelectedItem as string);
-            Process.Start(startInfo).WaitForExit();
+#else
+            startInfo.Arguments = string.Format("{0} {1} {2} {3}", "BingWallpaper", "", runAtStartup.ToString(), cmbExecution.SelectedItem as string);
+#endif
+            try
+            {
+                Process.Start(startInfo).WaitForExit();
 
-            MessageBox.Show("Preferences have been saved sucessfully! Bing Wallpaper should be restarted for commit changes.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None);
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-            Application.Current.Shutdown();
+                MessageBox.Show("Preferences have been saved sucessfully! Bing Wallpaper should be restarted for commit changes.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.None);
+                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                Application.Current.Shutdown();
+            }
+            catch {
+                MessageBox.Show("It was an error saving the information, please try again.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.None);
+            }
         }
-        #endregion
-        
+#endregion
+
     }
 }
