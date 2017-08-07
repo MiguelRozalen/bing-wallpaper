@@ -612,7 +612,7 @@
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">0.17.8.5</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">0.17.8.7</TextBlock>
                         <!--<TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                         <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom"  ><Run Text="0"/><Run Text="1"/><Run Text="/0"/><Run Text="8"/><Run Text="/2017"/></TextBlock>-->
                         <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />

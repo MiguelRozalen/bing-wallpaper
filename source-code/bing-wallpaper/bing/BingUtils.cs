@@ -11,6 +11,7 @@ namespace bing_wallpaper
     {
         public const string BING_IMG_URL_JSON = "http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=";
         public const string BING_URL = "http://www.bing.com";
+        public const string BING_RESOLUTION = "_1920x1080.jpg";
         private static string LOCAL_IMAGE_FILE_JPG = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.jpg";
         public static string LOCAL_CONFIGURATION_FILE_JSON = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.json";
         
@@ -82,7 +83,7 @@ namespace bing_wallpaper
             try
             {
                 bingObject = Step1_DownloadBingConfigFile(location);
-                string url = string.Format("{0}{1}", BING_URL, bingObject?.images?.FirstOrDefault()?.url);
+                string url = string.Format("{0}{1}{2}", BING_URL, bingObject?.images?.FirstOrDefault()?.urlbase, BING_RESOLUTION);
                 Debug.Print("La imagen está en: {0}", url);
                 Step2_DownloadImageFile(url);
             }
