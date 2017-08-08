@@ -1296,7 +1296,7 @@ Models Section style
     position: relative;
     overflow: hidden;
 	background: no-repeat center center; 
-	height: 262px;
+	min-height: 262px;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
