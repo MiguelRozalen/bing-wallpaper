@@ -9,14 +9,21 @@ $(function() {
 		document.getElementById("hello").style.backgroundImage = "url('"+imageUrl+"')";
       }   
 	});*/ 
-	getFile("https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=en-US", "xml",
+	getFile("https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=7&mkt=en-US", "xml",
 		function(response)
 		{
-			//console.log(response);
 			var xmlDoc = jQuery.parseXML(response.responseText);
-			var imageUrl = "https://www.bing.com"+xmlDoc.getElementsByTagName("urlBase")[0].textContent+"_1920x1080.jpg";
-			//console.log(imageUrl);
-			document.getElementById("hello").style.backgroundImage = "url('"+imageUrl+"')";
+			console.log(xmlDoc);
+			
+			var images = [];
+			for(var i=0; i<7; i++){
+				images[i] = "https://www.bing.com"+xmlDoc.getElementsByTagName("urlBase")[i].textContent+"_1920x1080.jpg";
+				document.getElementById("div_img_"+i).style.backgroundImage = "url('"+images[i]+"')";
+				document.getElementById("a_img_"+i).setAttribute('href', images[i]);
+				document.getElementById("text_img_"+i).innerHTML = xmlDoc.getElementsByTagName("copyright")[i].textContent.split("(")[0];
+			}
+
+			document.getElementById("hello").style.backgroundImage = "url('"+images[0]+"')";
 		}
 	)
 }); 
