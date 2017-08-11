@@ -13,7 +13,7 @@ $(function() {
 		function(response)
 		{
 			var xmlDoc = jQuery.parseXML(response.responseText);
-			console.log(xmlDoc);
+			//console.log(xmlDoc);
 			
 			var images = [];
 			for(var i=0; i<7; i++){
