@@ -360,11 +360,8 @@ namespace bing_wallpaper
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "BingWallpaperServiceManager.exe";
-#if DEBUG
-            startInfo.Arguments = string.Format("{0} {1} {2} {3}", "BingWallpaper2", "", runAtStartup.ToString(), cmbExecution.SelectedItem as string);
-#else
             startInfo.Arguments = string.Format("{0} {1} {2} {3}", "BingWallpaper", "", runAtStartup.ToString(), cmbExecution.SelectedItem as string);
-#endif
+
             try
             {
                 Process.Start(startInfo).WaitForExit();

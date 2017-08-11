@@ -8,6 +8,24 @@ namespace bing_wallpaper_service_manager
 {
     public class UtilsScheduleTask
     {
+        public static bool DeleteScheduleTask(string taskName)
+        {
+            bool result = false;
+            try
+            {
+                if (ExistsScheduleTask(taskName))
+                {
+                    using (TaskService tasksrvc = new TaskService())
+                    {
+                        tasksrvc.RootFolder.DeleteTask(taskName);
+                    }
+                }
+
+            }
+            catch { }
+            return result;
+        }
+
         public static bool ExistsScheduleTask(string taskName)
         {
             using (TaskService tasksrvc = new TaskService())

@@ -19,6 +19,10 @@ namespace bing_wallpaper_service_manager
             {
                 UtilsScheduleTask.CreateScheduleTask(args[0], args[1], args[2], args[3]);
             }
+            if (args.Length == 1)
+            {
+                UtilsScheduleTask.DeleteScheduleTask(args[0]);
+            }
         }
     }
 }

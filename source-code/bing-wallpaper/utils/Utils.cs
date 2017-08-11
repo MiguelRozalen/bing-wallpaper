@@ -34,7 +34,7 @@ namespace bing_wallpaper
             {
                 throw new NotImplementedException();
             }
-            catch (Exception e) { }
+            catch { }
             return result;
         }
 

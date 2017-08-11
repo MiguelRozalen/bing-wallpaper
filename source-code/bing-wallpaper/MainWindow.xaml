@@ -605,20 +605,24 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="13" Text="Author" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="13" Text="Authors" Margin="10,0,0,10" VerticalAlignment="Bottom" />
                         <TextBlock Grid.Row="0" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
                             <Hyperlink NavigateUri="https://github.com/MiguelRozalen" RequestNavigate="Hyperlink_RequestNavigate" >
                                 Miguel A. Rozalén
                             </Hyperlink>
+                            <TextBlock> &amp; </TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/FranRodriguez" RequestNavigate="Hyperlink_RequestNavigate" >
+                                Francisco J. Rodríguez
+                            </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">0.17.8.7</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">1.17.8.11</TextBlock>
                         <!--<TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                         <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom"  ><Run Text="0"/><Run Text="1"/><Run Text="/0"/><Run Text="8"/><Run Text="/2017"/></TextBlock>-->
                         <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                         <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
-                            <Hyperlink NavigateUri="https://github.com/MiguelRozalen/bing-wallpaper" RequestNavigate="Hyperlink_RequestNavigate">
-                                https://github.com/MiguelRozalen/bing-wallpaper
+                            <Hyperlink NavigateUri="https://miguelrozalen.github.io/bing-wallpaper/" RequestNavigate="Hyperlink_RequestNavigate">
+                                https://miguelrozalen.github.io/bing-wallpaper/
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Copyright" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
