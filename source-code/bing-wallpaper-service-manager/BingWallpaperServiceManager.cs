@@ -10,18 +10,22 @@ namespace bing_wallpaper_service_manager
     {
         static void Main(string[] args)
         {
-            /*args = new string[4];
-            args[0] = "BingWallpaperTesting";
-            args[1] = "Esto es una prueba";
-            args[2] = "True";
-            args[3] = "Every Day";*/
-            if (args.Length == 4)
+            var options = new Options();
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-                UtilsScheduleTask.CreateScheduleTask(args[0], args[1], args[2], args[3]);
+                if (options.Delete)
+                {
+                    UtilsScheduleTask.DeleteScheduleTask(options.Name.Replace('%', ' '));
+                }
+                else
+                {
+                    UtilsScheduleTask.CreateScheduleTask(options.Name.Replace('%',' '), 
+                        options.Description.Replace('%', ' '), options.RunAtStartup, options.Period.Replace('%', ' '));
+                }
             }
-            if (args.Length == 1)
+            else
             {
-                UtilsScheduleTask.DeleteScheduleTask(args[0]);
+                options.GetUsage();
             }
         }
     }

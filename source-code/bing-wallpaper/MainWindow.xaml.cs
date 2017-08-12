@@ -206,11 +206,14 @@ namespace bing_wallpaper
                 Utils.SetLockScreen(bingImageFile);
             }
 
-            string info = bingObject?.images?.FirstOrDefault()?.copyright;
-            if (info != null)
+            if (bingObject != null && bingObject.images != null)
             {
-                TextCopyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
-                TextTitle = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
+                string info = bingObject.images.FirstOrDefault().copyright;
+                if (info != null)
+                {
+                    TextCopyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
+                    TextTitle = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
+                }
             }
         }
 
@@ -360,7 +363,7 @@ namespace bing_wallpaper
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "BingWallpaperServiceManager.exe";
-            startInfo.Arguments = string.Format("{0} {1} {2} {3}", "BingWallpaper", "", runAtStartup.ToString(), cmbExecution.SelectedItem as string);
+            startInfo.Arguments = string.Format("-n {0} -d {1} -r {2} -p {3}", ("Bing Wallpaper").Replace(' ', '%') , ("Bing Wallpaper Desktop Windows").Replace(' ', '%'), runAtStartup.ToString(), (cmbExecution.SelectedItem as string).Replace(' ','%'));
 
             try
             {

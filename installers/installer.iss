@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Bing Wallpaper"
-#define MyAppVersion "1.17.8.11"
+#define MyAppVersion "1.17.8.12"
 #define MyAppPublisher "Miguel A. Rozalen & Francisco J. Rodriguez"
 #define MyAppURL "https://miguelrozalen.github.io/bing-wallpaper/"
 #define MyAppExeName "BingWallpaper.exe"
@@ -71,6 +71,8 @@ Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaper.vshost.exe.conf
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaperServiceManager.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaperServiceManager.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaperServiceManager.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\CommandLine.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\CommandLine.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\Hardcodet.Wpf.TaskbarNotification.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\Hardcodet.Wpf.TaskbarNotification.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\Hardcodet.Wpf.TaskbarNotification.xml"; DestDir: "{app}"; Flags: ignoreversion
@@ -88,11 +90,11 @@ Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeServiceName}"; Parameters: "BingWallpaper  True Every Day"; Description: "{cm:LaunchProgram,{#StringChange(MyAppExeServiceName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeServiceName}"; Parameters: "-n Bing%Wallpaper -d Bing%Wallpaper%Desktop%Windows -r True -p Every%Day"; Description: "{cm:LaunchProgram,{#StringChange(MyAppExeServiceName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [UninstallRun]
-Filename: "{app}\{#MyAppExeServiceName}"; Parameters: "BingWallpaper";
+Filename: "{app}\{#MyAppExeServiceName}"; Parameters: "-c True";
   
 [Code]
 procedure CurPageChanged(CurPageID: Integer);

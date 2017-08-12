@@ -34,7 +34,7 @@ namespace bing_wallpaper_service_manager
             }
         }
 
-        public static bool CreateScheduleTask(string taskName, string description, string runAtStartup, string executionPeriod)
+        public static bool CreateScheduleTask(string taskName, string description, bool runAtStartup, string executionPeriod)
         {
             bool result = false;
             try
@@ -45,10 +45,17 @@ namespace bing_wallpaper_service_manager
                     TaskDefinition td = TaskService.Instance.NewTask();
                     td.RegistrationInfo.Description = description;
 
-                    //Creating boot trigger that fires 5 minutes after the system starts.
-                    BootTrigger bt = new BootTrigger();
-                    bt.Delay = TimeSpan.FromMinutes(5);
-                    td.Triggers.Add(bt);
+                    // Create a trigger that fires when log in
+                    if (runAtStartup)
+                    {
+                        LogonTrigger lt = new LogonTrigger();
+                        td.Triggers.Add(lt);
+
+                        //Creating boot trigger that fires 2 minutes after the system starts.
+                        BootTrigger bt = new BootTrigger();
+                        bt.Delay = TimeSpan.FromMinutes(2);
+                        td.Triggers.Add(bt);
+                    }
 
                     switch (executionPeriod) {
                         default:
