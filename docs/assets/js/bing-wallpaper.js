@@ -1,3 +1,6 @@
+var url = "https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=7&mkt=en-US";
+var type = "xml";
+
 $(function() {
     /*$.ajax({
       crossOrigin: true,
@@ -9,24 +12,29 @@ $(function() {
 		document.getElementById("hello").style.backgroundImage = "url('"+imageUrl+"')";
       }   
 	});*/ 
-	getFile("https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=7&mkt=en-US", "xml",
-		function(response)
-		{
-			var xmlDoc = jQuery.parseXML(response.responseText);
-			//console.log(xmlDoc);
-			
-			var images = [];
-			for(var i=0; i<7; i++){
-				images[i] = "https://www.bing.com"+xmlDoc.getElementsByTagName("urlBase")[i].textContent+"_1920x1080.jpg";
-				document.getElementById("div_img_"+i).style.backgroundImage = "url('"+images[i]+"')";
-				document.getElementById("a_img_"+i).setAttribute('href', images[i]);
-				document.getElementById("text_img_"+i).innerHTML = xmlDoc.getElementsByTagName("copyright")[i].textContent.split("(")[0];
-			}
-
-			document.getElementById("hello").style.backgroundImage = "url('"+images[0]+"')";
-		}
-	)
+		
+	getFile(url, type, function (response){getImages(response)});
+	
 }); 
+
+function getImages(response){
+	try{
+		var xmlDoc = jQuery.parseXML(response.responseText);
+		//console.log(xmlDoc);
+		
+		var images = [];
+		for(var i=0; i<7; i++){
+			images[i] = "https://www.bing.com"+xmlDoc.getElementsByTagName("urlBase")[i].textContent+"_1920x1080.jpg";
+			document.getElementById("div_img_"+i).style.backgroundImage = "url('"+images[i]+"')";
+			document.getElementById("a_img_"+i).setAttribute('href', images[i]);
+			document.getElementById("text_img_"+i).innerHTML = xmlDoc.getElementsByTagName("copyright")[i].textContent.split("(")[0];
+		}
+
+		document.getElementById("hello").style.backgroundImage = "url('"+images[0]+"')";
+	}catch(err){
+		getFile(url, type, function (response){getImages(response)});
+	}	
+}
 
 
 // callback is optional, since jQuery has promises
@@ -93,7 +101,6 @@ function getFile(theURL, type, callback)
 			return _ajax.apply(this, arguments); // not special, use base Jquery ajax
 		};
 	})(jQuery.ajax);
-
 
 	return $.ajax({
 		url: theURL,

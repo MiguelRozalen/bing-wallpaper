@@ -1322,8 +1322,8 @@ Models Section style
     width:100%;
     position: absolute;
     left:0;
-    bottom:-80px;
-    transition: all 0.6s;
+    bottom:-100px;
+    transition: all 0.73s;
 }
 .model_caption h5{
     padding: 15px;
