@@ -616,17 +616,17 @@
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">1.17.8.12</TextBlock>
-                        <!--<TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom"  ><Run Text="0"/><Run Text="1"/><Run Text="/0"/><Run Text="8"/><Run Text="/2017"/></TextBlock>-->
-                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">1.17.10.7</TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">October 2017</TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
                             <Hyperlink NavigateUri="https://miguelrozalen.github.io/bing-wallpaper/" RequestNavigate="Hyperlink_RequestNavigate">
                                 https://miguelrozalen.github.io/bing-wallpaper/
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Copyright" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Copyright" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+                        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                     </Grid>
                 </Grid>
             </TabItem>

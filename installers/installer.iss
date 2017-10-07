@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Bing Wallpaper"
-#define MyAppVersion "1.17.8.12"
+#define MyAppVersion "1.17.10.7"
 #define MyAppPublisher "Miguel A. Rozalen & Francisco J. Rodriguez"
 #define MyAppURL "https://miguelrozalen.github.io/bing-wallpaper/"
 #define MyAppExeName "BingWallpaper.exe"
@@ -64,6 +64,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaper.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaper.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaper.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaper.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mikel\Desktop\bing-wallpaper\bin\BingWallpaper.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion

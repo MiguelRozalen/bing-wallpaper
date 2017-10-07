@@ -6,21 +6,14 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace bing_wallpaper
 {
@@ -103,6 +96,15 @@ namespace bing_wallpaper
         private bool setWallpaper;
         private bool setLockScreen;
         private List<CultureInfo> languageOptions;
+
+        #region GenericEventHandlers
+        private void RaisePropertyChanged(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        #endregion
+
 
         public List<CultureInfo> LanguageOptions
         {
@@ -234,14 +236,6 @@ namespace bing_wallpaper
         }
         #endregion
 
-        #region GenericEventHandlers
-        private void RaisePropertyChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        #endregion
-
         #region WindowEvents
         private void Window_StateChanged(object sender, EventArgs e)
         {
@@ -359,7 +353,7 @@ namespace bing_wallpaper
             {
                 File.Delete(BingUtils.LOCAL_CONFIGURATION_FILE_JSON);
             }
-            File.AppendAllText(BingUtils.LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(bingObject));
+            File.WriteAllText(BingUtils.LOCAL_CONFIGURATION_FILE_JSON, JsonConvert.SerializeObject(bingObject));
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "BingWallpaperServiceManager.exe";
@@ -373,8 +367,8 @@ namespace bing_wallpaper
                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                 Application.Current.Shutdown();
             }
-            catch {
-                MessageBox.Show("It was an error saving the information, please try again.", "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.None);
+            catch (Exception ex){
+                MessageBox.Show(string.Format("Error while saving information, {0}", ex.Message), "Bing Wallpaper", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.None);
             }
         }
 #endregion
