@@ -22,6 +22,101 @@ namespace bing_wallpaper
     /// </summary>
     public partial class MainWindow : Window
     {
+       
+        #region Atributes
+       
+        public List<string> executionPeriods = new List<string>() { "Every Day", "Every Week", "Every Month", "Every 3 Months", "Never More" };
+        public List<string> ExecutionPeriods
+        {
+            get { return executionPeriods; }
+            set
+            {
+                executionPeriods = value;
+                RaisePropertyChanged("ExecutionPeriods");
+            }
+        }
+
+        private bool runAtStartup;
+        public bool RunAtStartup
+        {
+            get { return runAtStartup; }
+            set
+            {
+                runAtStartup = value;
+                RaisePropertyChanged("RunAtStartup");
+            }
+        }
+
+        private bool setLockScreen;
+        public bool SetLockScreen
+        {
+            get { return setLockScreen; }
+            set
+            {
+                setLockScreen = value;
+                RaisePropertyChanged("SetLockScreen");
+            }
+        }
+
+        private bool setWallpaper;
+        public bool SetWallpaper
+        {
+            get { return setWallpaper; }
+            set
+            {
+                setWallpaper = value;
+                RaisePropertyChanged("SetWallpaper");
+            }
+        }
+
+        private string textTitle;
+        public string TextTitle
+        {
+            get { return textTitle; }
+            set
+            {
+                textTitle = value;
+                title_window.Text = value;
+                title_taskbar.Text = value;
+                RaisePropertyChanged("TextTitle");
+            }
+        }
+
+        private string textCopyright;
+        public string TextCopyright
+        {
+            get { return textCopyright; }
+            set
+            {
+                textCopyright = value;              
+                copyright_window.Text = value;
+                copyright_taskbar.Text = value;
+                RaisePropertyChanged("TextCopyright");
+            }
+        }
+
+        private List<CultureInfo> languageOptions;
+        public List<CultureInfo> LanguageOptions
+        {
+            get
+            {
+                if (languageOptions == null)
+                {
+                    CultureInfo[] ci = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).ToArray();
+                    languageOptions = new List<CultureInfo>();
+                    languageOptions.AddRange(ci.Where(p => p.Name.Length == 5).ToArray());
+                    languageOptions = languageOptions.OrderBy(p => p.EnglishName).ToList();
+                }
+                return languageOptions;
+            }
+            set
+            {
+                languageOptions = value;
+                RaisePropertyChanged("LanguageOptions");
+            }
+        }
+        #endregion
+               
         private static string bingImageFile = null;
         private static BingObject bingObject = null;
         private static string defaultLanguage = null;
@@ -35,8 +130,8 @@ namespace bing_wallpaper
             CloseSameProcesses();
 
             InitializeComponent();
-            this.DataContext = this;          
-
+            this.DataContext = this;
+         
             bingObject = BingUtils.ReadConfig();
             InitializeSettingsTab();
 
@@ -87,105 +182,12 @@ namespace bing_wallpaper
             SetWallpaper_Box.IsChecked = defaultSetWallpaper;
             SetLockScreen_Box.IsChecked = defaultSetLockScreen;
         }
-
-        #region Properties
-
-        private string textTitle;
-        private string textCopyright;
-        private bool runAtStartup;
-        private bool setWallpaper;
-        private bool setLockScreen;
-        private List<CultureInfo> languageOptions;
-
+        
         #region GenericEventHandlers
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private void RaisePropertyChanged(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        #endregion
-
-
-        public List<CultureInfo> LanguageOptions
-        {
-            get
-            {
-                if (languageOptions == null)
-                {
-                    CultureInfo[] ci = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).ToArray();
-                    languageOptions = new List<CultureInfo>();
-                    languageOptions.AddRange(ci.Where(p => p.Name.Length == 5).ToArray());
-                    languageOptions = languageOptions.OrderBy(p => p.EnglishName).ToList();
-                }
-                return languageOptions;
-            }
-            set
-            {
-                languageOptions = value;
-                RaisePropertyChanged("LanguageOptions");
-            }
-        }
-
-        public List<string> executionPeriods = new List<string>() { "Every Day", "Every Week", "Every Month", "Every 3 Months", "Never More" };
-        public List<string> ExecutionPeriods
-        {
-            get { return executionPeriods; }
-            set
-            {
-                executionPeriods = value;
-                RaisePropertyChanged("ExecutionPeriods");
-            }
-        }
-
-        public bool RunAtStartup
-        {
-            get { return runAtStartup; }
-            set
-            {
-                runAtStartup = value;
-                RaisePropertyChanged("RunAtStartup");
-            }
-        }
-
-        public bool SetLockScreen
-        {
-            get { return setLockScreen; }
-            set
-            {
-                setLockScreen = value;
-                RaisePropertyChanged("SetLockScreen");
-            }
-        }
-
-        public bool SetWallpaper
-        {
-            get { return setWallpaper; }
-            set
-            {
-                setWallpaper = value;
-                RaisePropertyChanged("SetWallpaper");
-            }
-        }
-
-
-        public string TextTitle
-        {
-            get { return textTitle; }
-            set
-            {
-                textTitle = value;
-                RaisePropertyChanged("TextTitle");
-            }
-        }
-
-        public string TextCopyright
-        {
-            get { return textCopyright; }
-            set
-            {
-                textCopyright = value;
-                RaisePropertyChanged("TextCopyright");
-            }
         }
 
         private ICommand _doubleClickCommandTaskBarIcon;
@@ -196,25 +198,31 @@ namespace bing_wallpaper
                 return _doubleClickCommandTaskBarIcon ?? (_doubleClickCommandTaskBarIcon = new CommandHandler(() => ActionDoubleClickCommandTaskBarIcon(), true));
             }
         }
-        #endregion
-
+        #endregion    
+          
         #region Functions
         public void SetBingWallpaper(string location)
         {
+            if(bingObject == null)
+            {
+                bingObject = new BingObject();
+            }
             bingImageFile = BingUtils.GetWallpaperFromBing(location, ref bingObject);
+
             Utils.SetWallpaper(bingImageFile);
-            if (bingObject != null && bingObject.config != null && bingObject.config.setLockScreen)
+
+            if (bingObject.config != null && bingObject.config.setLockScreen)
             {
                 Utils.SetLockScreen(bingImageFile);
             }
 
-            if (bingObject != null && bingObject.images != null)
+            if (bingObject.images != null)
             {
                 string info = bingObject.images.FirstOrDefault().copyright;
                 if (info != null)
                 {
-                    TextCopyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
-                    TextTitle = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
+                    this.TextCopyright = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
+                    this.TextTitle = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
                 }
             }
         }

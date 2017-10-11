@@ -100,7 +100,7 @@ namespace bing_wallpaper_service_manager
 
                     //string programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
                     string workingDirectory = string.Format(@"{0}\{1}", Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%"), "Bing Wallpaper");
-                    string programUri = string.Format(@"{0}\{1}", workingDirectory, "BingWallpaper.bat");
+                    string programUri = string.Format(@"{0}\{1}", workingDirectory, "BingWallpaper.exe");
 
                     // Create an action that will launch Notepad whenever the trigger fires
                     td.Actions.Add(programUri,null, workingDirectory);

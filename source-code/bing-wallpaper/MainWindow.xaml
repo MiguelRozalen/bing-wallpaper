@@ -384,7 +384,7 @@
     </Window.Resources>
 
     <Grid>
-        <TabControl x:Name="tabControl" TabStripPlacement="Left" BorderThickness="0" SelectionChanged="OnSelectionChanged">
+        <TabControl TabStripPlacement="Left" BorderThickness="0" SelectionChanged="OnSelectionChanged">
             <TabItem FontSize="13" Width="150" Height="40" BorderBrush="{x:Null}">
                 <TabItem.Style>
                     <Style TargetType="TabItem" BasedOn="{StaticResource ResourceKey={x:Type TabItem}}">
@@ -429,10 +429,10 @@
                             <RowDefinition Height="2*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding TextTitle}" />
-                        <TextBlock Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding TextCopyright}"/>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
+                        Foreground="White" FontSize="16" Padding="9,7,9,0" x:Name="title_window" />
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
+                        Foreground="White" FontSize="12" Padding="9,7,9,9" x:Name="copyright_window"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -490,8 +490,7 @@
                     <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Text="Aplication Settings" Margin="10,0,0,15" VerticalAlignment="Bottom"  />
 
                     <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Image Location" Margin="10,0,0,10" VerticalAlignment="Bottom" />
-                    <ComboBox Grid.Row="2" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" 
-                              ItemsSource="{Binding LanguageOptions}"  Name="cmbLocation">
+                    <ComboBox Grid.Row="2" Grid.Column="1" Width="205" HorizontalAlignment="Left" Margin="0,0,5,6" ItemsSource="{Binding LanguageOptions}"  Name="cmbLocation">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -535,8 +534,6 @@
                                 <Image Source="images/bing-icon-white.ico" Margin="-5,0,3,0"/>
                                 <TextBlock VerticalAlignment="Center" Margin="0,0,0,3" FontSize="14" Foreground="White">Apply</TextBlock>
                             </DockPanel>
-
-                            
                         </Button>
                     </Grid>
 
@@ -616,9 +613,9 @@
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Version" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">1.17.10.7</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">1.17.10.11</TextBlock>
                         <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Release" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
-                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">October 2017</TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">October 2017-2</TextBlock>
                         <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Web" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
                         <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Margin="10,0,0,10" VerticalAlignment="Bottom">
                             <Hyperlink NavigateUri="https://miguelrozalen.github.io/bing-wallpaper/" RequestNavigate="Hyperlink_RequestNavigate">
@@ -631,7 +628,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <tb:TaskbarIcon x:Name="myNotifyIcon" Visibility="Visible"  DataContext="{Binding}" DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"
+        <tb:TaskbarIcon Visibility="Visible" DoubleClickCommand="{Binding DoubleClickCommandTaskBarIcon}"
                     IconSource="/images/bing-wallpaper-icon.ico" MenuActivation="RightClick" PopupActivation="DoubleClick">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
@@ -649,10 +646,10 @@
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" x:Name="textBlock3" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                                        Foreground="White" FontSize="16" Padding="9,7,9,0" Text="{Binding TextTitle}" />
-                    <TextBlock Grid.Row="1" x:Name="textBlock4" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                                        Foreground="White" FontSize="12" Padding="9,7,9,9" Text="{Binding TextCopyright}"/>
+                    <TextBlock x:Name="title_taskbar" Grid.Row="0" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
+                                        Foreground="White" FontSize="16" Padding="9,7,9,0" />
+                    <TextBlock x:Name="copyright_taskbar" Grid.Row="1" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
+                                        Foreground="White" FontSize="12" Padding="9,7,9,9" />
                 </Grid>
             </tb:TaskbarIcon.TrayToolTip>
         </tb:TaskbarIcon>

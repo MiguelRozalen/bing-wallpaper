@@ -12,8 +12,8 @@ namespace bing_wallpaper
         public static readonly string BING_IMG_URL_JSON = "http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=";
         public static readonly string BING_URL = "http://www.bing.com";
         public static readonly string BING_RESOLUTION = "_1920x1080.jpg";
-        private static string LOCAL_IMAGE_FILE_JPG = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.jpg";
-        public static string LOCAL_CONFIGURATION_FILE_JSON = Environment.GetEnvironmentVariable("temp") + "\\bing-wallpaper.json";
+        private static string LOCAL_IMAGE_FILE_JPG = System.IO.Path.GetTempPath() + "bing-wallpaper.jpg";
+        public static string LOCAL_CONFIGURATION_FILE_JSON = System.IO.Path.GetTempPath() + "bing-wallpaper.json";
         
         private static BingObject Step1_DownloadBingConfigFile(string location)
         {
@@ -71,12 +71,13 @@ namespace bing_wallpaper
 
         public static BingObject ReadConfig()
         {
+            BingObject result = null;
             if (File.Exists(LOCAL_CONFIGURATION_FILE_JSON))
             {
                 string fileJson = File.ReadAllText(LOCAL_CONFIGURATION_FILE_JSON);
-                return JsonConvert.DeserializeObject<BingObject>(fileJson);
+                result = JsonConvert.DeserializeObject<BingObject>(fileJson);
             }
-            return null;
+            return result;
         }
         public static string GetWallpaperFromBing(string location, ref BingObject bingObject)
         {
