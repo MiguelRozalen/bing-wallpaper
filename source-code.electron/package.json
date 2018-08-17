@@ -1,0 +1,52 @@
+{
+  "name": "ng2-electron",
+  "version": "0.1.0",
+  "description": "Using Angular 2 with Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "tsc && concurrently \"npm run tsc:w\" \"electron .\" ",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DenisVuyka/ng2-electron.git"
+  },
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "Angular"
+  ],
+  "author": "Denys Vuika <denys.vuika@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DenisVuyka/ng2-electron/issues"
+  },
+  "homepage": "https://github.com/DenisVuyka/ng2-electron/#readme",
+  "dependencies": {
+    "@angular/common": "^5.2.9",
+    "@angular/compiler": "^5.2.9",
+    "@angular/core": "^5.2.9",
+    "@angular/forms": "^5.2.9",
+    "@angular/http": "^5.2.9",
+    "@angular/platform-browser": "^5.2.9",
+    "@angular/platform-browser-dynamic": "^5.2.9",
+    "@angular/router": "^5.2.9",
+    "@angular/upgrade": "^5.2.9",
+    "core-js": "^2.5.5",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "^5.5.10",
+    "systemjs": "^0.21.2",
+    "tslib": "^1.9.0",
+    "zone.js": "^0.8.26"
+  },
+  "devDependencies": {
+    "@types/core-js": "0.9.46",
+    "@types/node": "9.6.5",
+    "concurrently": "3.5.1",
+    "electron": "1.8.4",
+    "typescript": "2.8.1"
+  }
+}

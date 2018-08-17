@@ -1,0 +1,14 @@
+﻿<Application
+    x:Class="UBingWallpaper.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UBingWallpaper"
+    RequestedTheme="Light">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" BackgroundSource="Backdrop" TintColor="#f2f2f2" TintOpacity=".8"/>
+            <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" BackgroundSource="HostBackdrop" TintColor="#f2f2f2" TintOpacity="1"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
