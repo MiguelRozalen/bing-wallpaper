@@ -7,11 +7,57 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid VerticalAlignment="Top" MinHeight="260" Margin="0,0,0,10" ColumnSpacing="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
 
-    <Grid>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                           FontSize="28"
-                           VerticalAlignment="Center"
-                           Text="Info Page"/>
-    </Grid>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Text="Application Information" Margin="10,0,0,15" VerticalAlignment="Bottom"  />
+
+            <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Authors" Margin="8,0,0,8" VerticalAlignment="Bottom" />
+            <StackPanel Grid.Row="2" Grid.Column="1">
+                
+            </StackPanel>
+            <TextBlock Grid.Row="2" Grid.Column="1" FontSize="13" Margin="8,0,0,8" VerticalAlignment="Bottom">
+                <Hyperlink NavigateUri="https://github.com/MiguelRozalen" >
+                    Miguel A. Rozalén
+                </Hyperlink>
+                &amp;
+                <Hyperlink NavigateUri="https://github.com/FranRodriguez" >
+                    Francisco J. Rodríguez
+                </Hyperlink>.
+            </TextBlock>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Version" Margin="8,0,0,8" VerticalAlignment="Bottom"  />
+            <TextBlock Grid.Row="3" Grid.Column="1" FontSize="13" Margin="8,0,0,8" VerticalAlignment="Bottom">2.18.8.21</TextBlock>
+
+
+            <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Release" Margin="8,0,0,8" VerticalAlignment="Bottom"  />
+            <TextBlock Grid.Row="4" Grid.Column="1" FontSize="13" Margin="8,0,0,8" VerticalAlignment="Bottom">August 2018</TextBlock>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" FontSize="13" Text="Web Page" Margin="8,0,0,8" VerticalAlignment="Bottom"  />
+
+            <HyperlinkButton Grid.Row="5" Grid.Column="1" FontSize="13" VerticalAlignment="Center" Margin="8,0,0,0" NavigateUri="https://miguelrozalen.github.io/bing-wallpaper/">
+                https://miguelrozalen.github.io/bing-wallpaper/
+            </HyperlinkButton>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" FontSize="13" Text="Copyright" Margin="8,0,0,8" VerticalAlignment="Bottom" />
+            <TextBlock Grid.Row="6" Grid.Column="1" FontSize="13" Text="GNU General Public License v3.0 2017" Margin="8,0,0,8" VerticalAlignment="Bottom"  />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Brand Image" Margin="8,0,0,8" VerticalAlignment="Bottom" />
+            <Image Grid.Row="1"  Grid.Column="1" Margin="8,8,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Source="Assets/Bing-Wallpaper-Brand-copia.png"/>
+
+        </Grid>
+    </ScrollViewer>
 </Page>

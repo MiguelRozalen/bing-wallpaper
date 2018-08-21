@@ -9,19 +9,27 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="LoadImage"/>
-        <Grid Margin="0,0,20,19.667" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
-            <Grid.Background>
-                <SolidColorBrush Color="Black" Opacity="0.6"/>
-            </Grid.Background>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="1*" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
-                        Foreground="White" FontSize="16" Padding="9,7,9,0" x:Name="title_window" />
-            <TextBlock Grid.Row="1" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
-                        Foreground="White" FontSize="12" Padding="9,7,9,9" x:Name="copyright_window"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Text="Bing Daily Picture" Margin="10,0,0,15" VerticalAlignment="Bottom"/>
+        <Grid Grid.Row="1">
+             <Image x:Name="image" HorizontalAlignment="Center" VerticalAlignment="Center" Loaded="LoadImage" />
+            <Grid Margin="0,0,20,19.667" MaxHeight="140" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" MaxWidth="191">
+                <Grid.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" HorizontalAlignment="Left" Opacity="0.8" TextWrapping="Wrap" VerticalAlignment="Top" 
+                            Foreground="White" FontSize="16" Padding="9,7,9,0" x:Name="title_window" />
+                <TextBlock Grid.Row="1" HorizontalAlignment="Left" Opacity="0.7" TextWrapping="Wrap" VerticalAlignment="Top" 
+                            Foreground="White" FontSize="12" Padding="9,7,9,9" x:Name="copyright_window"/>
+            </Grid>
         </Grid>
+       
     </Grid>
 </Page>

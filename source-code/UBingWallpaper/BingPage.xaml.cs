@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -33,9 +34,31 @@ namespace UBingWallpaper
             Image img = sender as Image;
             img.Stretch = Stretch.Fill;
             img.Source = new BitmapImage(new Uri(BingUtils.LOCAL_IMAGE_FILE_JPG, UriKind.RelativeOrAbsolute));
+            img.Stretch = Stretch.UniformToFill;
 
-            title_window.Text = "Hola";
-            copyright_window.Text = "hOLA2";
+            BingObject bingObject = BingUtils.ReadConfig();
+            if (bingObject.images != null)
+            {
+                string info = bingObject.images.FirstOrDefault()?.copyright;
+                if (info != null)
+                {
+                    copyright_window.Text = Regex.Match(info, @"\(([^)]*)\)").Groups[1].Value;
+                    title_window.Text = info.Replace(Regex.Match(info, @"\(([^)]*)\)").Groups[0].Value, "");
+
+                    System.Threading.Tasks.Task.Run(async () =>
+                    {
+                        await BingUtils.SetBingWallpaperAsync();
+                    }).Wait();
+
+                    if (bingObject.config != null && bingObject.config.setLockScreen)
+                    {
+                        System.Threading.Tasks.Task.Run(async () =>
+                        {
+                            await BingUtils.SetBingWallpaperLockScreenAsync();
+                        }).Wait();
+                    }
+                }
+            }
         }
     }
 }

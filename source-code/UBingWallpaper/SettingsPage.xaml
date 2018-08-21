@@ -8,10 +8,69 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                           FontSize="28"
-                           VerticalAlignment="Center"
-                           Text="Settings Page"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid VerticalAlignment="Top" MinHeight="260" Margin="0,0,0,10" ColumnSpacing="40">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Text="Application Settings" Margin="10,0,0,15" VerticalAlignment="Bottom"  />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" Text="Image Location" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+        <ComboBox Grid.Row="1" Grid.Column="1" Width="205" MinHeight="30" HorizontalAlignment="Left" Margin="0,0,5,6" ItemsSource="{Binding LanguageOptions}"  Name="cmbLocation">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding EnglishName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="13" Text="Execution Period" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+        <ComboBox Grid.Row="2" Grid.Column="1" Width="205"  Height="30" HorizontalAlignment="Left" Margin="0,0,5,6" Name="cmbExecution" ItemsSource="{Binding ExecutionPeriods}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="13" Text="Run at Startup" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+        <CheckBox Name="RunAtStartup_Box" Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding RunAtStartup}"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="13" Text="Set Wallpaper" Margin="10,0,0,10" VerticalAlignment="Bottom"  />
+        <CheckBox Name="SetWallpaper_Box" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding SetWallpaper}"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" FontSize="13" Text="Set Lock Screen" Margin="10,0,0,10" VerticalAlignment="Bottom" />
+        <CheckBox Name="SetLockScreen_Box" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding SetLockScreen}"/>
+
+        <Grid Grid.Row="6" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Margin="0,8,10,-5"  Grid.Column="0" Click="Button_Click_Reset">
+                <TextBlock FontSize="14">Reset</TextBlock>
+            </Button>
+            <Button Margin="0,8,10,-5" Grid.Column="1" Click="Button_Click_Apply">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,0,3" FontSize="14" Foreground="White">Apply</TextBlock>
+            </Button>
+        </Grid>
+
     </Grid>
+    </ScrollViewer>
 </Page>

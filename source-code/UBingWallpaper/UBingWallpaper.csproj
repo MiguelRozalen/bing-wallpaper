@@ -128,6 +128,9 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\bing-icon.ico" />
+    <Content Include="Assets\Bing-Wallpaper-Brand-copia.png" />
+    <Content Include="Assets\bing-wallpaper-icon-inverse.png" />
+    <Content Include="Assets\bing-wallpaper-icon-no-borders.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />

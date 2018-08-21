@@ -7,12 +7,15 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TextBlock x:Name="AppTitle"
-        xmlns:appmodel="using:Windows.ApplicationModel"
-        Text="{x:Bind appmodel:Package.Current.DisplayName}"
-        Style="{StaticResource CaptionTextBlockStyle}"
-        IsHitTestVisible="False"
-        Canvas.ZIndex="1"/>
+        <Grid VerticalAlignment="Top" x:Name="AppTitle" Canvas.ZIndex="1">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,3,0,0"  Height="15" Source="Assets\bing-wallpaper-icon-inverse.png"/>
+            <TextBlock xmlns:appmodel="using:Windows.ApplicationModel"
+                       Margin="25,0,0,0"
+            Text="{x:Bind appmodel:Package.Current.DisplayName}"
+            Style="{StaticResource CaptionTextBlockStyle}"
+            IsHitTestVisible="False"
+            HorizontalAlignment="Left" VerticalAlignment="TOP"/>
+        </Grid>
 
         <NavigationView x:Name="NavView"
                     ItemInvoked="NavView_ItemInvoked"
@@ -29,9 +32,10 @@
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="SettingsNavItem" Content="Settings" Tag="settings">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEF58;"/>
+                        <FontIcon Glyph="&#xE713;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                
                 <NavigationViewItem x:Uid="InfoNavItem" Content="Info" Tag="info">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE946;"/>
@@ -39,7 +43,7 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
 
-            <Frame x:Name="ContentFrame" Margin="24, 0,24,24" VerticalAlignment="Stretch">
+            <Frame x:Name="ContentFrame" Margin="24,0,24,24" VerticalAlignment="Stretch">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>

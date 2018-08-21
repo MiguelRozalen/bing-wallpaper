@@ -5,6 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.System.UserProfile;
 
 namespace UBingWallpaper
 {
@@ -16,11 +19,36 @@ namespace UBingWallpaper
 #if DEBUG
         public static string LOCAL_IMAGE_FILE_JPG = System.IO.Path.GetTempPath() + "bing-wallpaper-test.jpg";
         public static string LOCAL_CONFIGURATION_FILE_JSON = System.IO.Path.GetTempPath() + "bing-wallpaper-test.json";
+        public static string BING_LOG = System.IO.Path.GetTempPath() + "bing-wallpaper-test.log";
+
 #else
         public static string LOCAL_IMAGE_FILE_JPG = System.IO.Path.GetTempPath() + "bing-wallpaper.jpg";
         public static string LOCAL_CONFIGURATION_FILE_JSON = System.IO.Path.GetTempPath() + "bing-wallpaper.json";
+        public static string BING_LOG = System.IO.Path.GetTempPath() + "bing-wallpaper.log";
 #endif
-        private static BingObject Step1_DownloadBingConfigFile(string location)
+        public static object BING_MTX = new object();
+
+        public static bool WriteInBingWallpaperLog(string message)
+        {
+            bool result = false;
+            try
+            {
+                lock (BING_MTX)
+                {
+                    File.AppendAllText(BING_LOG, string.Format("[{0}] {1}\n", DateTime.Now.ToString("dd/MM/YY HH:mm:ss"), message));
+                }
+            }
+            catch (Exception ex)
+            {
+                lock (BING_MTX)
+                {
+                    File.AppendAllText(BING_LOG, string.Format("[{0}] {1}\n", DateTime.Now.ToString("dd/MM/YY HH:mm:ss"), ex.Message) );
+                }
+            }
+            return result;
+        }
+        
+        private static BingObject DownloadBingConfigFile(string location)
         {
             BingObject newBingObject = null, actualBingObject = null;
             string json = string.Empty;
@@ -44,20 +72,18 @@ namespace UBingWallpaper
                 }
                 else
                 {
-                    throw new WebException();
+                    throw new WebException("Internet connection is not available");
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 //Fallo en la red, obtenemos el temporal
-                json = File.ReadAllText(LOCAL_CONFIGURATION_FILE_JSON);
-                newBingObject = JsonConvert.DeserializeObject<BingObject>(json);
-
+                WriteInBingWallpaperLog(ex.Message);
             }
             return newBingObject;
         }
 
-        private static void Step2_DownloadImageFile(string url)
+        private static void DownloadImageFile(string url)
         {
             try
             {
@@ -80,17 +106,46 @@ namespace UBingWallpaper
             }
             return result;
         }
-        public static string GetWallpaperFromBing(string location, ref BingObject bingObject)
+
+        public static BingObject GetWallpaperFromBing(string location)
         {
+            BingObject result = null;
             try
             {
-                bingObject = Step1_DownloadBingConfigFile(location);
-                string url = string.Format("{0}{1}{2}", BING_URL, bingObject?.images?.FirstOrDefault()?.urlbase, BING_RESOLUTION);
-                Step2_DownloadImageFile(url);
+                result = DownloadBingConfigFile(location);
+                if (result != null)
+                {
+                    DownloadImageFile(string.Format("{0}{1}{2}", BING_URL, result?.images?.FirstOrDefault()?.urlbase, BING_RESOLUTION));
+                }
             }
             catch(Exception ex) {
+                WriteInBingWallpaperLog(ex.Message);
             }
-            return LOCAL_IMAGE_FILE_JPG;
+            return result;
+        }
+
+        public static async Task<bool> SetBingWallpaperAsync()
+        {
+            bool success = false;
+            if (UserProfilePersonalizationSettings.IsSupported())
+            {
+                StorageFile file = await StorageFile.GetFileFromPathAsync(LOCAL_IMAGE_FILE_JPG);
+                StorageFile copyLocalFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                success = await UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(copyLocalFile);
+            }
+            return success;
+        }
+
+        public static async Task<bool> SetBingWallpaperLockScreenAsync()
+        {
+            bool success = false;
+            if (UserProfilePersonalizationSettings.IsSupported())
+            {
+                StorageFile file = await StorageFile.GetFileFromPathAsync(LOCAL_IMAGE_FILE_JPG);
+                StorageFile copyLocalFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                success = await UserProfilePersonalizationSettings.Current.TrySetLockScreenImageAsync(copyLocalFile);
+            }
+            return success;
         }
     }
 }

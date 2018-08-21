@@ -29,11 +29,9 @@ namespace UBingWallpaper
 
         public MainPage()
         {
-            BingObject bo = new BingObject();
-            BingUtils.GetWallpaperFromBing(null, ref bo);
+            BingObject bingObject = BingUtils.GetWallpaperFromBing("ES-es");
 
             this.InitializeComponent();
-            
 
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             Window.Current.SetTitleBar(AppTitle);
