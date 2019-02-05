@@ -13,8 +13,6 @@ $(function() {
 			document.getElementById("a_img_"+i).setAttribute('href', "https://www.bing.com"+images[i].urlbase+"_1920x1080.jpg");
 			document.getElementById("text_img_"+i).innerHTML = images[i].copyright;
 		}
-		
-		
       }   
-	});
+   });
 }); 
